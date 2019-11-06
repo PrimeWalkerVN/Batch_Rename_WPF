@@ -24,5 +24,60 @@ namespace BatchRename_Basic
         {
             InitializeComponent();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StartBatch_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveTop_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveUp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveDown_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveBottom_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadPreset_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SavePreset_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

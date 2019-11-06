@@ -5,8 +5,132 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BatchRename_Basic"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="BatchRename_Basic" Height="500" Width="1000"
+        Icon="Drawables/Rename_icon.png"
+        Loaded="Window_Loaded">
+    <Grid> <!--Define row and column of grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1000"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="400"/>
+        </Grid.RowDefinitions>
         
+        <!--Bars Area-->
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <ToolBarTray Background="AliceBlue">
+                <!--Tools Bar-->
+                <ToolBar Name="ToolsBar">
+                    <StackPanel Orientation="Horizontal" Background="AliceBlue">
+                        <Button Name="RefreshButton" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="RefreshButton_Click" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Source="Drawables/refresh.png" Stretch="Fill"/>
+                                <TextBlock Text=" Refresh" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Name="StartBatch" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="StartBatch_Click" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Source="Drawables/StartBatch.png" Stretch="Fill"/>
+                                <TextBlock Text=" Start Batch" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ToolBar>
+            </ToolBarTray>
+
+            <!--Action Bar-->
+            <ToolBarTray Background="AliceBlue">
+                <ToolBar Name="ActionsBar">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBox Background="AliceBlue" BorderThickness="0" Margin="10,0,0,0" Text="Methods : " VerticalAlignment="Center"/>
+                        <ComboBox Name="MethodsBox" Width="200" Height="25">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text=""/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button Name="AddButton" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="AddButton_Click" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Source="Drawables/add.png" Stretch="Fill"/>
+                                <TextBlock Text=" Add method" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Name="ClearButton" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="ClearButton_Click" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Source="Drawables/Clear.png" Stretch="Fill"/>
+                                <TextBlock Text=" Clear" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Name="MoveTop" Click="MoveTop_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                            <Image Width="20" Height="20" Source="Drawables/Arrow_Top.png" Stretch="Fill"/>
+                        </Button>
+
+                        <Button Name="MoveUp" Click="MoveUp_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                            <Image Width="20" Height="20" Source="Drawables/Arrow_Up.png" Stretch="Fill"/>
+                        </Button>
+
+                        <Button Name="MoveDown" Click="MoveDown_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                            <Image Width="20" Height="20" Source="Drawables/Arrow_Down.png" Stretch="Fill"/>
+                        </Button>
+
+                        <Button Name="MoveBottom" Click="MoveBottom_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                            <Image Width="20" Height="20" Source="Drawables/Arrow_Bottom.png" Stretch="Fill"/>
+                        </Button>
+                    </StackPanel>
+                </ToolBar>
+            </ToolBarTray>
+            <!--Preset bar-->
+            <ToolBarTray>
+                <ToolBar Name="PresetBar">
+                    <StackPanel Orientation="Horizontal" Background="AliceBlue" Height="30">
+                        <Button Name="LoadPreset" Click="LoadPreset_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0" Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="25" Height="25" Source="Drawables/Load.png" Stretch="Fill"/>
+                                <TextBlock Text=" Load" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Name="SavePreset" Click="SavePreset_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0" Margin="10,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="25" Height="25" Source="Drawables/Save.png" Stretch="Fill"/>
+                                <TextBlock Text=" Save" TextAlignment="Justify" Height="20"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock Text="Preset: " TextAlignment="Center" Margin="20,0,0,5" VerticalAlignment="Center"/>
+                        <ComboBox Name="PresetBox" Width="200" Height="25">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text=""/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </ToolBar>
+            </ToolBarTray>
+        </StackPanel>
+        
+        <!--Action Area-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Grid>
 </Window>
