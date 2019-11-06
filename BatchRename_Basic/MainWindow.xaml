@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BatchRename_Basic"
         mc:Ignorable="d"
-        Title="BatchRename_Basic" Height="500" Width="1000"
+        Title="BatchRename_Basic" Height="500" Width="1020"
         Icon="Drawables/Rename_icon.png"
         Loaded="Window_Loaded">
     <Grid> <!--Define row and column of grid-->
@@ -213,7 +213,7 @@
                                 <GridView x:Name="GridView">
                                     <GridViewColumn Width="150" Header="Filename" DisplayMemberBinding="{Binding fileName}"/>
                                     <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
-                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding filepath}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding filePath}"/>
                                     <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding fileError}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -281,7 +281,7 @@
                                 <GridView x:Name="GridView2">
                                     <GridViewColumn Width="150" Header="Foldername" DisplayMemberBinding="{Binding folderName}"/>
                                     <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
-                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding folderpath}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding folderPath}"/>
                                     <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding folderError}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
