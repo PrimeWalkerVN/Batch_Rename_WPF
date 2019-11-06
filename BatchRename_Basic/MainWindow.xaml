@@ -50,6 +50,7 @@
                         <ComboBox Name="MethodsBox" Width="200" Height="25">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
+                                    <!--Binding-->
                                     <TextBlock Text=""/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -112,11 +113,11 @@
                                 <TextBlock Text=" Save" TextAlignment="Justify" Height="20"/>
                             </StackPanel>
                         </Button>
-
                         <TextBlock Text="Preset: " TextAlignment="Center" Margin="20,0,0,5" VerticalAlignment="Center"/>
                         <ComboBox Name="PresetBox" Width="200" Height="25">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
+                                    <!--Binding-->
                                     <TextBlock Text=""/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -125,12 +126,175 @@
                 </ToolBar>
             </ToolBarTray>
         </StackPanel>
-        
         <!--Action Area-->
-        <Grid Grid.Row="1">
+        <!--Define row and column of grid-->
+        <Grid Grid.Row="1" ShowGridLines="True">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
                 
+                <ColumnDefinition Width="700"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="380"/>
+            </Grid.RowDefinitions>
+            <!--List box for action left side -->
+            <ListBox Name="ActionsListBox" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <!--Binding-->
+                            <TextBlock Text="Name1" TextWrapping="Wrap"/>
+                            <TextBlock Text=" : " TextWrapping="Wrap"/>
+                            <TextBlock Text="Args " TextWrapping="Wrap"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name ="Setting" Header="Setting" Click="Setting_Click"/>
+                        <MenuItem Name ="Delete" Header="Delete" Click="Delete_Click"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            <!--Tab control for action right side -->
+            <TabControl Grid.Column="1" Margin="0,0,0,0">
+                <!--Tab rename file -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rename Files"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Border BorderBrush="BlueViolet" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Background="AliceBlue">
+                                <Button Width="80" Margin="0,0,15,0" Background="AliceBlue" Name="OpenFileBrowser"
+                                        Click="OpenFileBrowser_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="25" Height="25" Source="Drawables/folder.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Browse..." TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Name="ClearFile" Margin="0,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="ClearFile_Click" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20" Height="20" Source="Drawables/Clear.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Clear" TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Name="MoveFileTop" Click="MoveFileTop_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Top.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFileUp" Click="MoveFileUp_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Up.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFileDown" Click="MoveFileDown_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Down.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFileBottom" Click="MoveFileBottom_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Bottom.png" Stretch="Fill"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
+                        <ListView Name="FileTab" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  SelectionChanged="FileTab_SelectionChanged">
+                            <ListView.View>
+                                <GridView x:Name="GridView">
+                                    <GridViewColumn Width="150" Header="Filename" DisplayMemberBinding="{Binding fileName}"/>
+                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding filepath}"/>
+                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding fileError}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="None" Foreground="Red"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
+
+                <!--Tab rename folder -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rename Folders"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Border BorderBrush="BlueViolet" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Background="AliceBlue">
+                                <Button Width="80" Margin="0,0,15,0" Background="AliceBlue" Name="OpenFolderBrowser"
+                                        Click="OpenFolderBrowser_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="25" Height="25" Source="Drawables/folder.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Browse..." TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Name="ClearFolder" Margin="0,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="ClearFolder_Click" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20" Height="20" Source="Drawables/Clear.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Clear" TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Name="MoveFolderTop" Click="MoveFolderTop_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Top.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFolderUp" Click="MoveFolderUp_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Up.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFolderDown" Click="MoveFolderDown_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Down.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="MoveFolderBottom" Click="MoveFolderBottom_Click" Background="AliceBlue" 
+                                Cursor="Hand" BorderThickness="0">
+                                    <Image Width="20" Height="20" Source="Drawables/Arrow_Bottom.png" Stretch="Fill"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
+                        <ListView Name="FolderTab" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  SelectionChanged="FolderTab_SelectionChanged">
+                            <ListView.View>
+                                <GridView x:Name="GridView2">
+                                    <GridViewColumn Width="150" Header="Foldername" DisplayMemberBinding="{Binding folderName}"/>
+                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding folderpath}"/>
+                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding folderError}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Content="None" Foreground="Red"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

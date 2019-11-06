@@ -79,5 +79,85 @@ namespace BatchRename_Basic
         {
 
         }
+
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OpenFileBrowser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearFile_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFileTop_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFileUp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFileDown_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFileBottom_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FileTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void OpenFolderBrowser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearFolder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFolderTop_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFolderUp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFolderDown_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MoveFolderBottom_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FolderTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
