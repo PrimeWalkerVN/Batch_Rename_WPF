@@ -10,11 +10,11 @@
         Loaded="Window_Loaded">
     <Grid> <!--Define row and column of grid-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1000"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
-            <RowDefinition Height="400"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
         
         <!--Bars Area-->
@@ -130,12 +130,12 @@
         <!--Define row and column of grid-->
         <Grid Grid.Row="1" ShowGridLines="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="30*"/>
                 
-                <ColumnDefinition Width="700"/>
+                <ColumnDefinition Width="70*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="380"/>
+                <RowDefinition Height="7*"/>
             </Grid.RowDefinitions>
             <!--List box for action left side -->
             <ListBox Name="ActionsListBox" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">

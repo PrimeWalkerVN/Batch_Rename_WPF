@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("drawables/folder.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("drawables/startbatch.png")]
 
 

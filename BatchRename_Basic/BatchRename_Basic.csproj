@@ -105,11 +105,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Drawables\StartBatch.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Drawables\add.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -141,6 +136,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Drawables\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawables\StartBatch.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
