@@ -13,3 +13,5 @@ E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\BatchRename_Basi
 E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\BatchRename_Basic.csproj.CoreCompileInputs.cache
 E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\BatchRename_Basic.exe
 E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\BatchRename_Basic.pdb
+E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\SettingDisplay\ReplaceSetting.g.cs
+E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\SettingDisplay\ReplaceSetting.baml
