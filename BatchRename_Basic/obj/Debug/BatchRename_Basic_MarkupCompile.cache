@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\obj\Debug\
+E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\
 BatchRename_Basic
 none
 false
 DEBUG;TRACE
-E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\App.xaml
+E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\App.xaml
 2-557694616
 
-12-517342911
-131569487696
+8-2131103690
+14-1175798665
 MainWindow.xaml;SettingDisplay\ReplaceSetting.xaml;
 
-True
+False
 

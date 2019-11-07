@@ -33,3 +33,5 @@ E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\BatchRename_Basi
 E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\BatchRename_Basic.exe
 E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\BatchRename_Basic.pdb
 >>>>>>> 93fd555b4651124ff96859833382efcbac1dd238
+E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\SettingDisplay\ReplaceSetting.g.cs
+E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\obj\Debug\SettingDisplay\ReplaceSetting.baml

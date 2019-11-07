@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using BatchRename_Basic.Features;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -10,11 +12,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
+
 
 
 namespace BatchRename_Basic
@@ -29,9 +34,11 @@ namespace BatchRename_Basic
             InitializeComponent();
         }
 
-        BindingList<FileInformation> ListFileSelected = new BindingList<FileInformation>();
-        BindingList<FolderInformation> ListFolderSelected = new BindingList<FolderInformation>();
-        BindingList<IMethodAction> ListMethod = new BindingList<IMethodAction>();
+        // all global list
+        ObservableCollection<StringAction> ListMethod = new ObservableCollection<StringAction>();
+        ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
+        ObservableCollection<FileInfomation> ListFolder = new ObservableCollection<FileInfomation>();
+        //preset here
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -100,49 +107,67 @@ namespace BatchRename_Basic
 
         private void OpenFileBrowser_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog browserFileDialog = new OpenFileDialog();
-            browserFileDialog.Multiselect = true;
-            FileInfo fileinfo = new FileInfo("C:/");
 
-            string filePathSelected;
-            string[] arrFilePathSelected;
-
-            if (browserFileDialog.ShowDialog() == true)
+            var browserFile = new FolderBrowserDialog();
+            if(browserFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                filePathSelected = browserFileDialog.FileNames.ToString();
-                arrFilePathSelected = browserFileDialog.FileNames;
-            }
-            else
-            {
-                filePathSelected = string.Empty;
-                return;
-            }
-
-            if (arrFilePathSelected.Length >= 2)
-            {
-                for (int i = 0; i < arrFilePathSelected.Length; ++i)
+                string[] listFile = Directory.GetFiles(browserFile.SelectedPath);
+                foreach(var f in listFile)
                 {
-                    fileinfo = new FileInfo(arrFilePathSelected[i]);
-                    if (fileinfo.Exists)
+                    FileTab.Items.Add(new FileInfomation()
                     {
-                        if (ListFileSelected.Count() == 0)
-                        {
-                            ListFileSelected.Add(new FileInformation()
-                            {
-                                fileName = fileinfo.Name,
-                                newName = fileinfo.Name,
-                                realName = fileinfo.Name.Replace(fileinfo.Extension.Length != 0 ? fileinfo.Extension : " ", ""),
-                                filePath = arrFilePathSelected[i],
-                                originalExtension = fileinfo.Extension,
-                                newExt = fileinfo.Extension,
-                                fileError = "OK"
-                            });
-                            OnFileListChange();
-                        }
-                        //else
-                    }
+                        FileName = Path.GetFileName(f),
+                        Path = f
+                    }) ;
                 }
             }
+
+
+
+
+            //OpenFileDialog browserFileDialog = new OpenFileDialog();
+            //browserFileDialog.Multiselect = true;
+            //FileInfo fileinfo = new FileInfo("C:/");
+
+            //string filePathSelected;
+            //string[] arrFilePathSelected;
+
+            //if (browserFileDialog.ShowDialog() == true)
+            //{
+            //    filePathSelected = browserFileDialog.FileNames.ToString();
+            //    arrFilePathSelected = browserFileDialog.FileNames;
+            //}
+            //else
+            //{
+            //    filePathSelected = string.Empty;
+            //    return;
+            //}
+
+            //if (arrFilePathSelected.Length >= 2)
+            //{
+            //    for (int i = 0; i < arrFilePathSelected.Length; ++i)
+            //    {
+            //        fileinfo = new FileInfo(arrFilePathSelected[i]);
+            //        if (fileinfo.Exists)
+            //        {
+            //            if (ListFileSelected.Count() == 0)
+            //            {
+            //                ListFileSelected.Add(new FileInformation()
+            //                {
+            //                    fileName = fileinfo.Name,
+            //                    newName = fileinfo.Name,
+            //                    realName = fileinfo.Name.Replace(fileinfo.Extension.Length != 0 ? fileinfo.Extension : " ", ""),
+            //                    filePath = arrFilePathSelected[i],
+            //                    originalExtension = fileinfo.Extension,
+            //                    newExt = fileinfo.Extension,
+            //                    fileError = "Good"
+            //                });
+            //                OnFileListChange();
+            //            }
+            //            //else
+            //        }
+            //    }
+            //}
         }
 
         private void ClearFile_Click(object sender, RoutedEventArgs e)
@@ -177,7 +202,21 @@ namespace BatchRename_Basic
 
         private void OpenFolderBrowser_Click(object sender, RoutedEventArgs e)
         {
+            var browserFolder = new FolderBrowserDialog();
 
+            if (browserFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string[] listFolder = Directory.GetDirectories(browserFolder.SelectedPath);
+
+                foreach (var d in listFolder)
+                {
+                    FolderTab.Items.Add(new FileInfomation()
+                    {
+                        FileName = new DirectoryInfo(d).Name,
+                        Path = d,
+                    });
+                }
+            }
         }
 
         private void ClearFolder_Click(object sender, RoutedEventArgs e)
@@ -212,7 +251,7 @@ namespace BatchRename_Basic
 
 
         //Method list file/folder changed event
-
+        /*
         public void OnFileListChange()
         {
             try
@@ -378,5 +417,6 @@ namespace BatchRename_Basic
                 }
             }
         }
+        */
     }
 }

@@ -9,19 +9,12 @@ BatchRename_Basic
 none
 false
 DEBUG;TRACE
-<<<<<<< HEAD
-E:\IDE\HKV\C#\WPF\BatchRename_Basic\BatchRename_Basic\App.xaml
+E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\App.xaml
 2-557694616
 
-10-835217936
-=======
-E:\Windows\Project\Batch_Rename_WPF\BatchRename_Basic\App.xaml
-11151548125
-
-8-862216194
->>>>>>> 93fd555b4651124ff96859833382efcbac1dd238
-131569487696
+9-1293448407
+14-1175798665
 MainWindow.xaml;SettingDisplay\ReplaceSetting.xaml;
 
-False
+True
 
