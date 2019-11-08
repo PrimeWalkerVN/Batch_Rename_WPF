@@ -34,15 +34,21 @@ namespace BatchRename_Basic
             InitializeComponent();
         }
 
+
+
+
         // all global list
-        ObservableCollection<IStringAction> ListMethod = new ObservableCollection<IStringAction>();
+        ObservableCollection<StringAction> ListMethod = new ObservableCollection<StringAction>() {
+            new ReplaceAction()
+        };
+
         ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
         ObservableCollection<FileInfomation> ListFolder = new ObservableCollection<FileInfomation>();
         //preset here
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            MethodsBox.ItemsSource = ListMethod;
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
@@ -57,7 +63,16 @@ namespace BatchRename_Basic
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            if (MethodsBox.SelectedItem == null)
+            {
 
+                System.Windows.MessageBox.Show("No method selected to add ?");
+                return;
+            }
+            var methodSelected = MethodsBox.SelectedItem as StringAction;
+            var instance = methodSelected.Clone();
+
+            ActionsListBox.Items.Add(instance);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -97,7 +112,8 @@ namespace BatchRename_Basic
 
         private void Setting_Click(object sender, RoutedEventArgs e)
         {
-
+             var method = ActionsListBox.SelectedItem as StringAction;
+            method.ShowEditDialog();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)

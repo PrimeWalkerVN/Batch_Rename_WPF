@@ -51,7 +51,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <!--Binding-->
-                                    <TextBlock Text=""/>
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -143,9 +143,9 @@
                     <DataTemplate>
                         <WrapPanel>
                             <!--Binding-->
-                            <TextBlock Text="Name1" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
                             <TextBlock Text=" : " TextWrapping="Wrap"/>
-                            <TextBlock Text="Args " TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Args.Details}" TextWrapping="Wrap"/>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
