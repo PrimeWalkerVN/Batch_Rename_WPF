@@ -1,0 +1,41 @@
+﻿<Window x:Class="BatchRename_Basic.SettingDisplay.ISBNOption"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BatchRename_Basic.SettingDisplay"
+        mc:Ignorable="d"
+        Title="ISBNOption" Height="450" Width="800">
+    <StackPanel Orientation="Vertical">
+        <TextBlock Margin="50" Text="ISBN Position" TextAlignment="Center" FontSize="30" FontWeight="ExtraBold"
+                  Foreground="Red"/>
+        <StackPanel Orientation="Vertical" >
+            <TextBlock Text="Choose ISBN Position: " VerticalAlignment="Center" Margin="0,0,0,30"
+                       FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"
+                       />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton Name="beforeRadio" Content="Before name" Margin="0,0,20,0" VerticalAlignment="Center"
+                             FontSize="20"/>
+                <RadioButton Name="afterRadio" Content="After name" Margin="0,0,20,0"
+                             FontSize="20"/>
+
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    >
+            <Button Name="ISBNOK" Height="50" Width="100" VerticalAlignment="Top" Background="Bisque"
+                     Click="ISBNOK_Click"
+                    Margin="20"
+                    >
+                <TextBlock Text="OK" FontSize="20"></TextBlock>
+            </Button>
+            <Button Name="CancelISBNButton" Height="50" Width="100" VerticalAlignment="Top" Background="Bisque" 
+                    Click="CancelISBNButton_Click"
+                    Margin="20"
+                    >
+                <TextBlock Text="Cancel" FontSize="20"></TextBlock>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</Window>

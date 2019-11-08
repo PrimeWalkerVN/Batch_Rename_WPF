@@ -56,10 +56,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SettingDisplay\ISBNOption.xaml.cs">
+      <DependentUpon>ISBNOption.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingDisplay\RemoveSetting.xaml.cs">
+      <DependentUpon>RemoveSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingDisplay\ReplaceSetting.xaml.cs">
       <DependentUpon>ReplaceSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\StringAction.cs" />
+    <Compile Include="SettingDisplay\SavePreset.xaml.cs">
+      <DependentUpon>SavePreset.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,7 +82,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingDisplay\ISBNOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingDisplay\RemoveSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingDisplay\ReplaceSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingDisplay\SavePreset.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

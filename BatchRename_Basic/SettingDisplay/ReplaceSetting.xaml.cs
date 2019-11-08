@@ -55,7 +55,7 @@ namespace BatchRename_Basic.SettingDisplay
             this.DialogResult = true;
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void CancelReplaceButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close(); 
         }

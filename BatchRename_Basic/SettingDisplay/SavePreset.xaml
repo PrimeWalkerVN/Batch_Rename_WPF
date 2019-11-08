@@ -1,0 +1,20 @@
+﻿<Window x:Class="BatchRename_Basic.SettingDisplay.SavePreset"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BatchRename_Basic.SettingDisplay"
+        mc:Ignorable="d"
+        Title="SavePreset" Height="300" Width="350">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+        <StackPanel Margin="0,0,0,30" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Save as: "/>
+            <TextBox Name="savePresetTextBox" Width="100"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Width="40"  Margin="0,0,30,0" Click="OnSave" Content="Save"/>
+            <Button Width="40" Click="Cancel" Content="Cancel"/>
+        </StackPanel>
+
+    </StackPanel>
+</Window>
