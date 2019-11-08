@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BatchRename_Basic.Features
 {
     public delegate string StringProcessor(string origin);
-    public interface StringArgs
+    public interface IStringArgs
     {
         string Details
         {
@@ -17,13 +17,13 @@ namespace BatchRename_Basic.Features
         string ParseArgs();
     }
 
-    public interface StringAction
+    public interface IStringAction
     {
         string Name {get; set;}
         StringProcessor Processor { get; set; }
-        StringArgs Args { get; set; }
+        IStringArgs Args { get; set; }
 
-        StringAction Clone();
+        IStringAction Clone();
 
         void ShowEditDialog();
     }

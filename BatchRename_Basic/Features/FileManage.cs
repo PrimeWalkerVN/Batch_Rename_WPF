@@ -69,5 +69,10 @@ namespace BatchRename_Basic.Features
 
             return f;
         }
+
+        public void UpdatePreview()
+        {
+            NotifyChange("newFileName");
+        }
     }
 }

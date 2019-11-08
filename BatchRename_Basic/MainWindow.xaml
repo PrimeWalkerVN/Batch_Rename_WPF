@@ -211,10 +211,10 @@
                                   SelectionChanged="FileTab_SelectionChanged">
                             <ListView.View>
                                 <GridView x:Name="GridView">
-                                    <GridViewColumn Width="150" Header="Filename" DisplayMemberBinding="{Binding fileName}"/>
-                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
-                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding filePath}"/>
-                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding fileError}">
+                                    <GridViewColumn Width="150" Header="Filename" DisplayMemberBinding="{Binding FileName}"/>
+                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding NewFileName}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding Path}"/>
+                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding Error}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="None" Foreground="Red"/>
@@ -279,10 +279,10 @@
                                   SelectionChanged="FolderTab_SelectionChanged">
                             <ListView.View>
                                 <GridView x:Name="GridView2">
-                                    <GridViewColumn Width="150" Header="Foldername" DisplayMemberBinding="{Binding folderName}"/>
-                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding newName}"/>
-                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding folderPath}"/>
-                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding folderError}">
+                                    <GridViewColumn Width="150" Header="Foldername" DisplayMemberBinding="{Binding FileName}"/>
+                                    <GridViewColumn Width="150" Header="NewFolderName" DisplayMemberBinding="{Binding NewFileName}"/>
+                                    <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding Path}"/>
+                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding Error}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="None" Foreground="Red"/>

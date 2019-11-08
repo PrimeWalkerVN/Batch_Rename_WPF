@@ -35,7 +35,7 @@ namespace BatchRename_Basic
         }
 
         // all global list
-        ObservableCollection<StringAction> ListMethod = new ObservableCollection<StringAction>();
+        ObservableCollection<IStringAction> ListMethod = new ObservableCollection<IStringAction>();
         ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
         ObservableCollection<FileInfomation> ListFolder = new ObservableCollection<FileInfomation>();
         //preset here
@@ -109,17 +109,52 @@ namespace BatchRename_Basic
         {
 
             var browserFile = new FolderBrowserDialog();
-            if(browserFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            DialogResult result = browserFile.ShowDialog();
+
+            if(result == System.Windows.Forms.DialogResult.OK)
             {
                 string[] listFile = Directory.GetFiles(browserFile.SelectedPath);
                 foreach(var f in listFile)
                 {
-                    FileTab.Items.Add(new FileInfomation()
+                    FileInfomation file = new FileInfomation()
                     {
                         FileName = Path.GetFileName(f),
                         Path = f
-                    }) ;
+                    };
+                    int count = ListFile.Count;
+                    bool fileAdded = false;
+                    if (count != 0)
+                    {
+                        bool fileExist = false;
+                        for (int i = 0; i < count; ++i)
+                        {
+                            if (string.Compare(ListFile[i].FileName, file.FileName) == 0)
+                            {
+                                System.Windows.MessageBox.Show(ListFile[i].FileName + " is already selected!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                fileExist = true;
+                            }                            
+                        }
+                        if(!fileExist)
+                        {
+                            if (!fileAdded)
+                            {
+                                FileTab.Items.Add(file);
+                                ListFile.Add(file);
+                                fileAdded = true;
+                               
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!fileAdded)
+                        {
+                            FileTab.Items.Add(file);
+                            ListFile.Add(file);
+                        }
+                    }
                 }
+                OnPreviewChange();
             }
 
 
@@ -170,6 +205,18 @@ namespace BatchRename_Basic
             //}
         }
 
+        private void OnPreviewChange()
+        {
+            for(int i = 0; i < ListFile.Count; ++i)
+            {
+                ListFile[i].UpdatePreview();
+            }
+            for (int i = 0; i < ListFolder.Count; ++i)
+            {
+                ListFolder[i].UpdatePreview();
+            }
+        }
+
         private void ClearFile_Click(object sender, RoutedEventArgs e)
         {
 
@@ -203,20 +250,55 @@ namespace BatchRename_Basic
         private void OpenFolderBrowser_Click(object sender, RoutedEventArgs e)
         {
             var browserFolder = new FolderBrowserDialog();
+            DialogResult result = browserFolder.ShowDialog();
 
-            if (browserFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 string[] listFolder = Directory.GetDirectories(browserFolder.SelectedPath);
 
                 foreach (var d in listFolder)
                 {
-                    FolderTab.Items.Add(new FileInfomation()
+                    FileInfomation folder = new FileInfomation()
                     {
                         FileName = new DirectoryInfo(d).Name,
-                        Path = d,
-                    });
+                        Path = d
+                    };
+
+                    int count = ListFolder.Count;
+                    bool folderAdded = false;
+                    if (count != 0)
+                    {
+                        bool folderExisted = false;
+                        for (int i = 0; i < count; ++i)
+                        {
+                            if (string.Compare(ListFolder[i].FileName, folder.FileName) == 0)
+                            {
+                                System.Windows.MessageBox.Show(ListFolder[i].FileName + " is already selected!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                folderExisted = true;
+                            }
+                        }
+                        if (!folderExisted)
+                        {
+                            if (!folderAdded)
+                            {
+                                FolderTab.Items.Add(folder);
+                                ListFolder.Add(folder);
+                                folderAdded = true;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!folderAdded)
+                        {
+                            FolderTab.Items.Add(folder);
+                            ListFolder.Add(folder);
+                        }
+                    }
                 }
             }
+            OnPreviewChange();
         }
 
         private void ClearFolder_Click(object sender, RoutedEventArgs e)
