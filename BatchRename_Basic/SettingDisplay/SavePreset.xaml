@@ -12,8 +12,8 @@
             <TextBox Name="savePresetTextBox" Width="100"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Width="40"  Margin="0,0,30,0" Click="OnSave" Content="Save"/>
-            <Button Width="40" Click="Cancel" Content="Cancel"/>
+            <Button Width="40"  Margin="0,0,30,0" Click="OnSave_Click" Content="Save"/>
+            <Button Width="40" Click="Cancel_Click" Content="Cancel"/>
         </StackPanel>
 
     </StackPanel>

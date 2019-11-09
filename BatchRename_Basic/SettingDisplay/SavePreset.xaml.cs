@@ -23,5 +23,15 @@ namespace BatchRename_Basic.SettingDisplay
         {
             InitializeComponent();
         }
+
+        private void OnSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

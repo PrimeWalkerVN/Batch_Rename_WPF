@@ -23,5 +23,15 @@ namespace BatchRename_Basic.SettingDisplay
         {
             InitializeComponent();
         }
+
+        private void CancelISBNButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ISBNOK_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
