@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,6 +34,7 @@ namespace BatchRename_Basic
         public MainWindow()
         {
             InitializeComponent();
+            string ActivePresetFile = "";
         }
 
 
@@ -47,6 +49,11 @@ namespace BatchRename_Basic
 
         ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
         ObservableCollection<FileInfomation> ListFolder = new ObservableCollection<FileInfomation>();
+        ObservableCollection<Preset> PresetList = new ObservableCollection<Preset>();
+
+        public string ActivePresetFile { get; private set; }
+        public string PresetName { get; private set; }
+
         //preset here
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -268,88 +275,197 @@ namespace BatchRename_Basic
 
         private void LoadPreset_Click(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog LoadFileDialog = new Microsoft.Win32.OpenFileDialog();
+            LoadFileDialog.Filter = "All Files (*.*)|*.*";
+            LoadFileDialog.Multiselect = true;
 
+
+            if (LoadFileDialog.ShowDialog() == true)
+            {
+                // remove all items of methodPreset
+                //      PresetList = new ObservableCollection<Preset>();
+                ActionsListBox.Items.Clear();
+                string selectecPresetFilePath = LoadFileDialog.FileName;
+
+                // set global preset file path 
+                ActivePresetFile = selectecPresetFilePath;
+
+                // begin reading preset
+
+                using (StreamReader sr = new StreamReader(selectecPresetFilePath))
+                {
+                    string Line;
+
+                    while ((Line = sr.ReadLine()) != null)
+                    { // not endpoint?
+                        string presetname = Line; // set name of preset
+
+                        //create a list of action to store actions
+                        ObservableCollection<StringAction> temp = new ObservableCollection<StringAction>();
+
+                        // determine type of method to add to temp
+                        while ((Line = sr.ReadLine()) != "--The end--")
+                        {
+                            if (Line.Contains("Replace"))
+                            {
+                                temp.Add(new ReplaceAction()
+                                {
+                                    Args = new ReplaceArgs(Line)
+                                });
+                            }
+                            else
+                            {
+                                if (Line.Contains("Remove"))
+                                {
+                                    temp.Add(new RemoveAction()
+                                    {
+                                        Args = new RemoveArgs(Line)
+                                    });
+                                }
+                                else
+                                {
+                                    if (Line.Contains("Extension"))
+                                    {
+                                        temp.Add(new ExtensionAction()
+                                        {
+                                            Args = new ExtensionArgs(Line)
+                                        });
+                                    }
+                                    else
+                                    {
+                                        if (Line.Contains("Case"))
+                                        {
+                                            temp.Add(new CaseAction()
+                                            {
+                                                Args = new CaseArgs(Line)
+                                            });
+                                        }
+                                        else
+                                        {
+                                            if (Line.Contains("Normalize"))
+                                            {
+                                                temp.Add(new NormalizeAction()
+                                                {
+                                                    Args = new NormalizeArgs()
+                                                });
+                                            }
+                                            else
+                                            {
+                                                if (Line.Contains("ISBN"))
+                                                {
+                                                    temp.Add(new ISBNAction()
+                                                    {
+                                                        Args = new ISBNArgs()
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    if (Line.Contains("GUID"))
+                                                    {
+                                                        temp.Add(new GUIDAction()
+                                                        {
+                                                            Args = new GUIDArgs()
+                                                        });
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        PresetList.Add(new Preset()
+                        {
+                            PresetName = presetname,
+                            ListPresetItem = temp
+                        });
+                    }
+                }
+            }
+
+            PresetBox.ItemsSource = PresetList;
         }
 
         private void SavePreset_Click(object sender, RoutedEventArgs e)
-        {
-            //if (ActionsListBox.Items.Count == 0)
-            //{
-            //    System.Windows.MessageBox.Show("Method empty!");
-            //    return;
-            //}
-            //// there are something to save
+            {
+                if (ActionsListBox.Items.Count == 0)
+                {
+                    System.Windows.MessageBox.Show("Method empty!");
+                    return;
+                }
+                // there are something to save
 
-            //var presetDialog = new SavePreset();
-            //if (presetDialog.ShowDialog() == true)
-            //{
-            //    string presetName = presetDialog.presetName;
+                var presetDialog = new SavePreset();
+                if (presetDialog.ShowDialog() == true)
+                {
+                    string PresetName = presetDialog.PresetName;
 
 
-            //    // any preset file opened before ?
-            //    if (currentPresetFile != "")
-            //    {
-            //        using (StreamWriter sw = File.AppendText(currentPresetFile))
-            //        {
-            //            sw.WriteLine(presetName);
+                    // any preset file opened before ?
+                    if (!string.IsNullOrEmpty(ActivePresetFile))
+                    {
+                        using (StreamWriter sw = File.AppendText(ActivePresetFile))
+                        {
+                            sw.WriteLine(PresetName);
 
-            //            foreach (StringAction action in methodListBox.Items)
-            //            {
-            //                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                sw.WriteLine(methodTemplate);
-            //            }
+                            foreach (StringAction action in ActionsListBox.Items)
+                            {
+                                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                                sw.WriteLine(methodTemplate);
+                            }
 
-            //            sw.WriteLine("**");
+                            sw.WriteLine("--The end--");
+                        }
+                        System.Windows.MessageBox.Show($"Preset saved in {ActivePresetFile}");
+                    }
+                    else
+                    {
+                        // default preset path is : C:/BatchRename/preset.txt
+                        string presetFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                        string presetFilePath = presetFolderPath + @"\" + PresetName + ".txt";
 
-            //        }
-            //        System.Windows.MessageBox.Show($"Saved. Please check preset file in {currentPresetFile}");
-            //    }
-            //    else
-            //    {
-            //        // default preset path is : C:/BatchRename/preset.txt
-            //        string presetFolderPath = @"C:\BatchRename";
-            //        string presetFilePath = @"C:\BatchRename\preset.txt";
+                        if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
+                        // if folder exist 
+                        if (!File.Exists(presetFilePath))
+                        {
+                            using (StreamWriter sw = File.CreateText(presetFilePath))
+                            {
+                                sw.WriteLine(PresetName);
 
-            //        if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
-            //        // if folder exist 
-            //        if (!File.Exists(presetFilePath))
-            //        {
-            //            using (StreamWriter sw = File.CreateText(presetFilePath))
-            //            {
-            //                sw.WriteLine(presetName);
+                                foreach (StringAction action in ActionsListBox.Items)
+                                {
+                                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                                    sw.WriteLine(methodTemplate);
+                                }
+                                sw.WriteLine("--The end--");
+                            }
+                            System.Windows.MessageBox.Show($"Preset saved in {presetFilePath}");
+                        }
+                        else
+                        // append file
+                        {
+                            using (StreamWriter sw = File.AppendText(presetFilePath))
+                            {
+                                sw.WriteLine(PresetName);
 
-            //                foreach (StringAction action in methodListBox.Items)
-            //                {
-            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                    sw.WriteLine(methodTemplate);
-            //                }
-            //                sw.WriteLine("**");
-            //            }
-            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
-            //        }
-            //        else
-            //        // append file
-            //        {
-            //            using (StreamWriter sw = File.AppendText(presetFilePath))
-            //            {
-            //                sw.WriteLine(presetName);
+                                foreach (StringAction action in ActionsListBox.Items)
+                                {
+                                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                                    sw.WriteLine(methodTemplate);
+                                }
 
-            //                foreach (StringAction action in methodListBox.Items)
-            //                {
-            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                    sw.WriteLine(methodTemplate);
-            //                }
+                                sw.WriteLine("--The end--");
 
-            //                sw.WriteLine("**");
+                            }
+                            System.Windows.MessageBox.Show($"Preset saved in {presetFilePath}");
+                        }
+                    }
+                }
+            }
+    }
 
-            //            }
-            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
-            //        }
-            //    }
-            //}
-        }
-
-        private void Setting_Click(object sender, RoutedEventArgs e)
+    private void Setting_Click(object sender, RoutedEventArgs e)
         {
              var method = ActionsListBox.SelectedItem as StringAction;
             method.ShowEditDialog();
@@ -588,173 +704,173 @@ namespace BatchRename_Basic
         }
 
 
-        //Method list file/folder changed event
-        /*
-        public void OnFileListChange()
+    //Method list file/folder changed event
+    /*
+    public void OnFileListChange()
+    {
+        try
         {
-            try
+            if (ListMethod.Count == 0)
             {
-                if (ListMethod.Count == 0)
-                {
-                    return;
-                }
-                OnMethodListChanged();
+                return;
             }
-            catch (Exception e)
-            {
-                //handle exception here;
-            }
+            OnMethodListChanged();
         }
-
-        public void OnFolderListChange()
+        catch (Exception e)
         {
-            try
-            {
-                if (ListMethod.Count == 0)
-                {
-                    return;
-                }
-                OnMethodListChanged();
-            }
-            catch (Exception e)
-            {
-                //handle exception here;
-            }
+            //handle exception here;
         }
-
-        private void OnMethodListChanged()
-        {
-            try
-            {
-                for (int i = 0; i < ListFileSelected.Count; i++)
-                {
-                    foreach (var action in ListMethod)
-                    {
-                        if (action.IsChecked == true)
-                        {
-                            if (action.isApplyToName == true)
-                            {
-                                ListFileSelected[i].realName = action.Process(ListFileSelected[i].realName);
-                                ListFileSelected[i].newName = ListFileSelected[i].realName + ListFileSelected[i].originalExtension;
-                            }
-                            else if (action.isApplyToName == false)
-                            {
-                                ListFileSelected[i].newExt = action.Process(ListFileSelected[i].newExt);
-                                ListFileSelected[i].newName = ListFileSelected[i].newName.Replace(ListFileSelected[i].originalExtension, selectedFileList[i].newExt);
-                            }
-                        }
-                    }
-                    ListFileSelected[i].UpdatePreview();
-                }
-                replaceDuplicateFileName();
-                for (int i = 0; i < ListFolderSelected.Count; i++)
-                {
-                    foreach (var action in ListMethod)
-                    {
-                        if (action.IsChecked == true)
-                        {
-                            ListFolderSelected[i].newName = action.Process(ListFolderSelected[i].newName);
-                        }
-                    }
-                    ListFolderSelected[i].UpdatePreview();
-                }
-                replaceDuplicatrFolderName();
-            }
-            catch (Exception ex)
-            {
-                for (int i = 0; i < ListFileSelected.Count; i++)
-                {
-                    ListFileSelected[i].fileError = ex.ToString();
-                }
-            }
-
-            
-
-        }
-
-        //Handle duplicate
-        public void replaceDuplicateFileName()
-        {
-            for (int i = 0; i < ListFileSelected.Count - 1; i++)
-            {
-                //FileName Extension
-                string ext = ListFileSelected[i].newExt;
-                int k = 0;
-
-                for (int j = i + 1; j < ListFileSelected.Count; j++)
-                {
-                    if (String.Compare(ListFileSelected[i].newName, ListFileSelected[j].newName) == 0)
-                    {
-                        if (isAppendSuffix == true)
-                        {
-                            int num = 1;
-                            var tempNewName = $"{ListFileSelected[i].realName} ({num}){ext}";
-                            while (k < ListFileSelected.Count)
-                            {
-                                if (String.Compare(tempNewName, ListFileSelected[k].newName) == 0)
-                                {
-                                    num++;
-                                    tempNewName = $"{ListFileSelected[i].realName} ({num}){ext}";
-                                    k = 0;
-                                }
-                                else
-                                {
-                                    k++;
-                                }
-                            }
-                            ListFileSelected[j].newName = tempNewName;
-                            k = 0;
-                        }
-                        else
-                        {
-                            ListFileSelected[j].newName = ListFileSelected[j].fileName;
-                        }
-                        ListFileSelected[j].UpdatePreview();
-                    }
-                }
-            }
-        }
-
-        public void replaceDuplicatrFolderName()
-        {
-            for (int i = 0; i < ListFolderSelected.Count - 1; i++)
-            {
-                int k = 0;
-
-                for (int j = i + 1; j < ListFolderSelected.Count; j++)
-                {
-                    if (String.Compare(ListFolderSelected[i].newName, ListFolderSelected[j].newName) == 0)
-                    {
-                        if (isAppendSuffix == true)
-                        {
-                            int num = 1;
-
-                            var tempNewName = $"{ListFolderSelected[i].newName} ({num})";
-                            while (k < ListFolderSelected.Count)
-                            {
-                                if (String.Compare(tempNewName, ListFolderSelected[k].newName) == 0)
-                                {
-                                    num++;
-                                    tempNewName = $"{ListFolderSelected[i].newName} ({num})";
-                                    k = 0;
-                                }
-                                else
-                                {
-                                    k++;
-                                }
-                            }
-                            ListFolderSelected[j].newName = tempNewName;
-                            k = 0;
-                        }
-                        else
-                        {
-                            ListFolderSelected[j].newName = ListFolderSelected[j].folderName;
-                        }
-                        ListFolderSelected[j].UpdatePreview();
-                    }
-                }
-            }
-        }
-        */
     }
+
+    public void OnFolderListChange()
+    {
+        try
+        {
+            if (ListMethod.Count == 0)
+            {
+                return;
+            }
+            OnMethodListChanged();
+        }
+        catch (Exception e)
+        {
+            //handle exception here;
+        }
+    }
+
+    private void OnMethodListChanged()
+    {
+        try
+        {
+            for (int i = 0; i < ListFileSelected.Count; i++)
+            {
+                foreach (var action in ListMethod)
+                {
+                    if (action.IsChecked == true)
+                    {
+                        if (action.isApplyToName == true)
+                        {
+                            ListFileSelected[i].realName = action.Process(ListFileSelected[i].realName);
+                            ListFileSelected[i].newName = ListFileSelected[i].realName + ListFileSelected[i].originalExtension;
+                        }
+                        else if (action.isApplyToName == false)
+                        {
+                            ListFileSelected[i].newExt = action.Process(ListFileSelected[i].newExt);
+                            ListFileSelected[i].newName = ListFileSelected[i].newName.Replace(ListFileSelected[i].originalExtension, selectedFileList[i].newExt);
+                        }
+                    }
+                }
+                ListFileSelected[i].UpdatePreview();
+            }
+            replaceDuplicateFileName();
+            for (int i = 0; i < ListFolderSelected.Count; i++)
+            {
+                foreach (var action in ListMethod)
+                {
+                    if (action.IsChecked == true)
+                    {
+                        ListFolderSelected[i].newName = action.Process(ListFolderSelected[i].newName);
+                    }
+                }
+                ListFolderSelected[i].UpdatePreview();
+            }
+            replaceDuplicatrFolderName();
+        }
+        catch (Exception ex)
+        {
+            for (int i = 0; i < ListFileSelected.Count; i++)
+            {
+                ListFileSelected[i].fileError = ex.ToString();
+            }
+        }
+
+
+
+    }
+
+    //Handle duplicate
+    public void replaceDuplicateFileName()
+    {
+        for (int i = 0; i < ListFileSelected.Count - 1; i++)
+        {
+            //FileName Extension
+            string ext = ListFileSelected[i].newExt;
+            int k = 0;
+
+            for (int j = i + 1; j < ListFileSelected.Count; j++)
+            {
+                if (String.Compare(ListFileSelected[i].newName, ListFileSelected[j].newName) == 0)
+                {
+                    if (isAppendSuffix == true)
+                    {
+                        int num = 1;
+                        var tempNewName = $"{ListFileSelected[i].realName} ({num}){ext}";
+                        while (k < ListFileSelected.Count)
+                        {
+                            if (String.Compare(tempNewName, ListFileSelected[k].newName) == 0)
+                            {
+                                num++;
+                                tempNewName = $"{ListFileSelected[i].realName} ({num}){ext}";
+                                k = 0;
+                            }
+                            else
+                            {
+                                k++;
+                            }
+                        }
+                        ListFileSelected[j].newName = tempNewName;
+                        k = 0;
+                    }
+                    else
+                    {
+                        ListFileSelected[j].newName = ListFileSelected[j].fileName;
+                    }
+                    ListFileSelected[j].UpdatePreview();
+                }
+            }
+        }
+    }
+
+    public void replaceDuplicatrFolderName()
+    {
+        for (int i = 0; i < ListFolderSelected.Count - 1; i++)
+        {
+            int k = 0;
+
+            for (int j = i + 1; j < ListFolderSelected.Count; j++)
+            {
+                if (String.Compare(ListFolderSelected[i].newName, ListFolderSelected[j].newName) == 0)
+                {
+                    if (isAppendSuffix == true)
+                    {
+                        int num = 1;
+
+                        var tempNewName = $"{ListFolderSelected[i].newName} ({num})";
+                        while (k < ListFolderSelected.Count)
+                        {
+                            if (String.Compare(tempNewName, ListFolderSelected[k].newName) == 0)
+                            {
+                                num++;
+                                tempNewName = $"{ListFolderSelected[i].newName} ({num})";
+                                k = 0;
+                            }
+                            else
+                            {
+                                k++;
+                            }
+                        }
+                        ListFolderSelected[j].newName = tempNewName;
+                        k = 0;
+                    }
+                    else
+                    {
+                        ListFolderSelected[j].newName = ListFolderSelected[j].folderName;
+                    }
+                    ListFolderSelected[j].UpdatePreview();
+                }
+            }
+        }
+    }
+    */
+}
 }

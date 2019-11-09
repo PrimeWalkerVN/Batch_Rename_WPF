@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Features\Preset.cs" />
     <Compile Include="SettingDisplay\ISBNOption.xaml.cs">
       <DependentUpon>ISBNOption.xaml</DependentUpon>
     </Compile>

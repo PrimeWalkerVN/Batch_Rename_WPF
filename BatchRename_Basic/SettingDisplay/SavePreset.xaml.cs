@@ -19,6 +19,7 @@ namespace BatchRename_Basic.SettingDisplay
     /// </summary>
     public partial class SavePreset : Window
     {
+        public string PresetName { get; set; }
         public SavePreset()
         {
             InitializeComponent();
@@ -26,12 +27,13 @@ namespace BatchRename_Basic.SettingDisplay
 
         private void OnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            PresetName = SavePresetTextBox.Text;
+            this.DialogResult = true;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
     }
 }
