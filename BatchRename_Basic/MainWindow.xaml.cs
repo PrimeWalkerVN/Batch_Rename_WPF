@@ -105,9 +105,16 @@ namespace BatchRename_Basic
                     FileName = ListFile[i].FileName,
                     Path = ListFile[i].Path
                 };
+                bool fileNameChange = true;
                 foreach (StringAction action in ActionsListBox.Items)
                 {
+                    string tempCheck = tempFile.FileName;
                     tempFile.FileName = action.Operation.Invoke(tempFile.FileName);
+                    //Truong hop file name khong thay doi
+                    if (string.Compare(tempCheck, tempFile.FileName) == 0)
+                        fileNameChange = false;
+                    if (!fileNameChange)
+                        break;
                     ObservableCollection<FileInfomation> tempListFile = new ObservableCollection<FileInfomation>(ListFile);
                     tempListFile.Remove(tempListFile[i]);
                     foreach (FileInfomation file in tempListFile)
@@ -124,32 +131,34 @@ namespace BatchRename_Basic
                         break;
                     }
                 }
-
-                if(string.Compare(ListFile[i].Error, "File duplicate!") != 0)
-                {
-                    ListFile[i].NewFileName = tempFile.FileName;
-                    ListFile[i].Error = "";
-                    var temp = new FileInfo(ListFile[i].Path);
-                    string checkPath = Path.GetDirectoryName(ListFile[i].Path);
-                    if (File.Exists(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName))
+                if (fileNameChange) {
+                    if (string.Compare(ListFile[i].Error, "File duplicate!") != 0)
                     {
-                        System.Windows.MessageBox.Show($"File {tempFile.FileName} existed!");
-                        continue;
+                        ListFile[i].NewFileName = tempFile.FileName;
+                        ListFile[i].Error = "";
+                        var temp = new FileInfo(ListFile[i].Path);
+                        string checkPath = Path.GetDirectoryName(ListFile[i].Path);
+                        if (File.Exists(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName))
+                        {
+                            System.Windows.MessageBox.Show($"File {tempFile.FileName} existed!");
+                            continue;
+                        }
+
+                        File.Move((Path.GetDirectoryName(ListFile[i].Path) + "\\" + ListFile[i].FileName).ToString(), (Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName).ToString());
+                        //temp.MoveTo(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName);
+                        //int pos = ListFile.IndexOf(ListFile[i]);
+                        //ListFile.Remove(ListFile[i]);
+                        ListFile[i].FileName = tempFile.FileName;
+                        ListFile[i].Path = Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName;
+                        //ListFile.Insert(pos, tempFile);
+
+                        /////
+                        FileTab.Items.Refresh();
+
+                        //    File.Move(ListFile[i].Path, tempFile.FileName);
                     }
-
-                    File.Move((Path.GetDirectoryName(ListFile[i].Path) + "\\" + ListFile[i].FileName).ToString(), (Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName).ToString());
-                    //temp.MoveTo(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName);
-                    //int pos = ListFile.IndexOf(ListFile[i]);
-                    //ListFile.Remove(ListFile[i]);
-                    ListFile[i].FileName = tempFile.FileName;
-                    ListFile[i].Path = Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName;
-                    //ListFile.Insert(pos, tempFile);
-
-                    /////
-                    FileTab.Items.Refresh();
-                    
-                //    File.Move(ListFile[i].Path, tempFile.FileName);
                 }
+
             }
             System.Windows.MessageBox.Show("File Done!");
             
