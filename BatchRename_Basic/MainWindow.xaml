@@ -208,13 +208,13 @@
                         </Border>
 
                         <ListView Name="FileTab" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  SelectionChanged="FileTab_SelectionChanged">
+                                  SelectionChanged="FileTab_SelectionChanged" >
                             <ListView.View>
                                 <GridView x:Name="GridView">
-                                    <GridViewColumn Width="150" Header="Filename" DisplayMemberBinding="{Binding FileName}"/>
-                                    <GridViewColumn Width="150" Header="New Name" DisplayMemberBinding="{Binding NewFileName}"/>
+                                    <GridViewColumn Width="180" Header="Filename" DisplayMemberBinding="{Binding FileName}"/>
+                                    <GridViewColumn Width="180" Header="New Name" DisplayMemberBinding="{Binding NewFileName}"/>
                                     <GridViewColumn Width="230" Header="Path" DisplayMemberBinding="{Binding Path}"/>
-                                    <GridViewColumn Width="150" Header="Error" DisplayMemberBinding="{Binding Error}">
+                                    <GridViewColumn Width="110" Header="Error" DisplayMemberBinding="{Binding Error}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Label Content="None" Foreground="Red"/>

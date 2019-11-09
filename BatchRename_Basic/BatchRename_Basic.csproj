@@ -56,9 +56,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Features\Preset.cs" />
+    <Compile Include="SettingDisplay\ExtensionSetting.xaml.cs">
+      <DependentUpon>ExtensionSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingDisplay\ISBNOption.xaml.cs">
       <DependentUpon>ISBNOption.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingDisplay\NewCase.xaml.cs">
+      <DependentUpon>NewCase.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingDisplay\RemoveSetting.xaml.cs">
       <DependentUpon>RemoveSetting.xaml</DependentUpon>
@@ -83,7 +88,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingDisplay\ExtensionSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingDisplay\ISBNOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingDisplay\NewCase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

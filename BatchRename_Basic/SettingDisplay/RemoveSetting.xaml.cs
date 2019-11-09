@@ -31,7 +31,7 @@ namespace BatchRename_Basic.SettingDisplay
 
        
 
-        private void RemmoveOK_Click(object sender, RoutedEventArgs e)
+        private void RemoveOK_Click(object sender, RoutedEventArgs e)
         {
             string SpecialChars = @"""<>/\|:?!";
             for (int i = 0; i < SpecialChars.Length; i++)

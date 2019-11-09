@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BatchRename_Basic.SettingDisplay;
 using BatchRename_Basic.Features;
+using System.Text.RegularExpressions;
 
 namespace BatchRename_Basic.Features
 {
@@ -17,8 +18,7 @@ namespace BatchRename_Basic.Features
         {
             get;
         }
-
-        string ParseArgs();
+       string ParseArgs();
     }
 
     public interface StringAction
@@ -174,7 +174,7 @@ namespace BatchRename_Basic.Features
     }
     public class ISBNAction : StringAction
     {
-        public string Name => "ISBN action";
+        public string Name => "ISBN Move";
         public StringOperation Operation => _option;
         public StringArgs Args { get; set; }
         
@@ -311,8 +311,273 @@ namespace BatchRename_Basic.Features
         }
 
     }
-
     //====================End Remove Pattern Action Area=====================
 
+    //====================New Case Action Area===============================
+
+    public class CaseArgs : StringArgs, INotifyPropertyChanged
+    {
+
+        private string _casetype; // upper case, lower case, title case
+
+        public string ParseArgs()
+        {
+            return CaseType;
+        }
+        public CaseArgs() { }
+        public CaseArgs(string details)
+        {
+            string[] word = details.Split('/');
+            CaseType = word[1];
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string Details => $"Change name to {CaseType} ";
+        public int GetCaseType()
+        {
+            if (_casetype == "UpperCase") return 1;
+            else if (_casetype == "LowerCase") return 2;
+            return 3;
+        }
+        public void NotifyChange(string eventStr)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(eventStr));
+            }
+        }
+
+        public string CaseType
+        {
+            get => _casetype; set
+            {
+                _casetype = value;
+                NotifyChange("CaseType");
+                NotifyChange("Details");
+            }
+        }
+
+    }
+
+    public class CaseAction : StringAction
+    {
+        public string Name => "New case";
+        public StringArgs Args { get; set; }
+
+
+        private string _changecase(string origin)
+        {
+            var caseArgs = Args as CaseArgs;
+
+            int casetype = caseArgs.GetCaseType();
+            if (casetype == 1)
+            {
+                return origin.ToUpper();
+            }
+            else if (casetype == 2)
+            {
+                return origin.ToLower();
+
+            }
+            else
+            {
+                Char FirstChar = char.ToUpper(origin[0]);
+                String PartRemain = origin.Substring(1).ToLower();
+
+                return FirstChar + PartRemain ;
+
+            }
+        }
+        public StringOperation Operation => _changecase;
+
+        public StringAction Clone()
+        {
+            return new CaseAction()
+            {
+                Args = new CaseArgs()
+            };
+        }
+
+        public void ShowEditDialog()
+        {
+            var screen = new NewCase(Args as CaseArgs);
+            if (screen.ShowDialog() == true)
+            {
+                var caseArgs = Args as CaseArgs;
+
+                caseArgs.CaseType = screen.CaseChoose;
+            }
+        }
+    }
+    //====================End Case Action Area===============================
+
+
+    //====================Full name normalize Area===========================
+    public class NormalizeArgs : StringArgs
+    {
+        public string Details => $"Normalize name";
+
+        public string ParseArgs() { return ""; }
+    }
+    public class NormalizeAction : StringAction
+    {
+        public string Name => "Normalize action";
+        public StringArgs Args { get; set; }
+        public StringOperation Operation => _normalize;
+        private string _normalize(string origin)
+        {
+
+            //find and matches regular expression then trim them
+            string trimmed = origin.Trim();
+            trimmed = Regex.Replace(trimmed, @"[ \t]+", " ");
+            
+
+            //Split and Combine part 
+            string res = "";
+            string[] words = trimmed.Split(' ');
+            foreach (var word in words)
+            {
+                res = res + char.ToUpper(word[0]) + word.Substring(1).ToLower() + " ";
+            }
+
+            //Remove dot out of string 
+            int dot = res.LastIndexOf('.');
+            if (res[dot - 1] == ' ') res=res.Remove(dot - 1, 1);
+
+            return res;
+
+        }
+        public StringAction Clone()
+        {
+            return new NormalizeAction()
+            {
+                Args = new NormalizeArgs()
+            };
+        }
+        public void ShowEditDialog()
+        {
+            return;
+            // Because Dialog not used thus do not anything
+        }
+    }
+    //====================End Full name normalize Area=======================
+
+    //====================Extension Area==============================
+
+    public class ExtensionArgs : StringArgs, INotifyPropertyChanged
+    {
+        private string _newextension;
+
+        public string ParseArgs()
+        {
+            return NewExtension;
+        }
+        public ExtensionArgs() { }
+        public ExtensionArgs(string details)
+        {
+            // extract args
+            string[] words = details.Split('/');
+            NewExtension = words[1];
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Details => $"Change extenstion to .{NewExtension}";
+
+        private void NotifyChange(string v)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(v));
+            }
+        }
+        public string NewExtension
+        {
+            get => _newextension; set
+            {
+                _newextension = value;
+                NotifyChange("New extension");
+                NotifyChange("Details");
+
+            }
+        }
+    }
+    public class ExtensionAction : StringAction
+    {
+        public string Name => "Extension Change";
+        private string _changeExtension(string origin)
+        {
+            var extArgs = Args as ExtensionArgs;   
+            var newExt = extArgs.NewExtension;
+            var foundPosition = origin.LastIndexOf(".");
+            var beginning = origin.Substring(0, foundPosition);
+
+            //Remove Special Char
+            var charsToRemove = new string[] { "@", ",", ".", ";", "'" };
+            foreach (var c in charsToRemove)
+            {
+                 newExt= newExt.Replace(c, string.Empty);
+            }
+
+
+            return $"{beginning}.{newExt}";
+        }
+        public StringOperation Operation { get => _changeExtension; }
+        public StringArgs Args { get; set; }
+        public StringAction Clone()
+        {
+            return new ExtensionAction()
+            {
+                Args = new ExtensionArgs()
+            };
+        }
+        public void ShowEditDialog()
+        {
+            var screen = new ExtensionSetting(Args as ExtensionArgs);
+            if (screen.ShowDialog() == true)
+            {
+                var extensionArgs = Args as ExtensionArgs;
+                extensionArgs.NewExtension = screen.NewExtension;
+            }
+        }
+    }
+    //====================End extension Area==========================
+
+    //====================GUID Area===================================
+
+    public class GUIDArgs : StringArgs
+    {
+        public string Details => "GUID Generate";
+
+        public string ParseArgs()
+        {
+            return "";
+        }
+    }
+    public class GUIDAction : StringAction
+    {
+        public string Name => "GUID action";
+        public StringArgs Args { get; set; }
+
+        public StringOperation Operation => _generating;
+        private string _generating(string origin)
+        {
+            var extPos = origin.LastIndexOf('.');
+            var global = Guid.NewGuid();
+            if (extPos == -1) return global.ToString();
+            return $"{global.ToString()}.{origin.Substring(extPos + 1)}";
+        }
+        public StringAction Clone()
+        {
+            return new GUIDAction()
+            {
+                Args = new GUIDArgs()
+            };
+        }
+        public void ShowEditDialog()
+        {
+            return;
+            // nothing to do with this.
+        }
+    }
+    //====================End GUID Area===============================
 
 }
