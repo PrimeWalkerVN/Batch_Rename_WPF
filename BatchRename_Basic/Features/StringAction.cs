@@ -181,19 +181,24 @@ namespace BatchRename_Basic.Features
 
         private string _option(string origin)
         {
-
+            int dotPosition = origin.LastIndexOf('.');
+            string fileExt = origin.Substring(dotPosition);
+            string fileName = origin.Substring(0, origin.Length - fileExt.Length);
             var isbnArgs = Args as ISBNArgs;
             if (isbnArgs.Optional == "Before")
             {
-                string isbn = origin.Substring(0, 13);
-                string name = origin.Substring(15);
-                return $"{isbn} {name}";
+                string isbn = fileName.Substring(dotPosition - 13, 13);
+
+                string name = fileName.Substring(0, origin.Length - fileExt.Length - 13);
+                name = name.Trim();
+                return $"{isbn} {name}{fileExt}";
             }
             else if (isbnArgs.Optional == "After")
             {
-                string isbn = origin.Substring(0, 13);
-                string name = origin.Substring(15);
-                return $"{name} {isbn}";
+                string isbn = fileName.Substring(0, 13);
+                string name = fileName.Substring(14);
+                name = name.Trim();
+                return $"{name} {isbn}{fileExt}";
             }
 
             return "error";
