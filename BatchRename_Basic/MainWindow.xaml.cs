@@ -754,7 +754,7 @@ namespace BatchRename_Basic
             {
                 int newIndex = FolderTab.SelectedIndex - 1;
                 if (newIndex < 0) return;
-                object selected = FileTab.SelectedItem;
+                object selected = FolderTab.SelectedItem;
                 FolderTab.Items.Remove(selected);
                 FolderTab.Items.Insert(newIndex, selected);
                 FolderTab.SelectedIndex = newIndex;
