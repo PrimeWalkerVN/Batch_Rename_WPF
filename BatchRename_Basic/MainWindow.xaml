@@ -160,7 +160,7 @@
             <!--Tab control for action right side -->
             <TabControl Grid.Column="1" Margin="0,0,0,0">
                 <!--Tab rename file -->
-                <TabItem>
+                <TabItem Name="TabControlFile">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rename Files"/>
@@ -228,7 +228,7 @@
                 </TabItem>
 
                 <!--Tab rename folder -->
-                <TabItem>
+                <TabItem Name="TabControlFolder">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rename Folders"/>

@@ -1,4 +1,5 @@
 ﻿using BatchRename_Basic.Features;
+using BatchRename_Basic.SettingDisplay;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -73,8 +74,14 @@ namespace BatchRename_Basic
                 System.Windows.MessageBox.Show("No file (folder) selected!");
                 return;
             }
-
-            ProcessAllMethod_File();
+            if (TabControlFile.IsSelected)
+            {
+                ProcessAllMethod_File();
+            }
+            else
+            {
+                ProcessAllMethod_Folder();
+            }
         }
 
         private void ProcessAllMethod_File()
@@ -110,11 +117,59 @@ namespace BatchRename_Basic
                 {
                     ListFile[i].NewFileName = tempFile.FileName;
                     ListFile[i].Error = "";
+                    var temp = new FileInfo(ListFile[i].Path);
+                    temp.MoveTo(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName);
+                    FileTab.Items.Refresh();
+                    
                 //    File.Move(ListFile[i].Path, tempFile.FileName);
-                 //   File.Move()
                 }
             }
+            System.Windows.MessageBox.Show("File Done!");
         }
+
+        private void ProcessAllMethod_Folder()
+        {
+            for (int i = 0; i < ListFolder.Count; ++i)
+            {
+                FileInfomation tempFolder = new FileInfomation
+                {
+                    FileName = ListFolder[i].FileName,
+                    Path = ListFolder[i].Path
+                };
+                foreach (StringAction action in ActionsListBox.Items)
+                {
+                    tempFolder.FileName = action.Operation.Invoke(tempFolder.FileName);
+                    ObservableCollection<FileInfomation> tempListFolder = new ObservableCollection<FileInfomation>(ListFolder);
+                    tempListFolder.Remove(tempListFolder[i]);
+                    foreach (FileInfomation file in tempListFolder)
+                    {
+                        if (string.Compare(tempFolder.FileName, file.FileName) == 0)
+                        {
+                            ListFolder[i].Error = "Folder duplicate!";
+                            ListFolder[i].NewFileName = tempFolder.FileName;
+                        }
+                    }
+                    if (string.Compare(tempFolder.FileName, " ") == 0)
+                    {
+                        ListFolder[i].Error = "Error name!";
+                        break;
+                    }
+                }
+
+                if (string.Compare(ListFolder[i].Error, "File duplicate!") != 0)
+                {
+                    ListFolder[i].NewFileName = tempFolder.FileName;
+                    ListFolder[i].Error = "";
+                    var temp = new FileInfo(ListFolder[i].Path);
+                    temp.MoveTo(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName);
+                    FolderTab.Items.Refresh();
+
+                    //    File.Move(ListFile[i].Path, tempFile.FileName);
+                }
+            }
+            System.Windows.MessageBox.Show("Folder Done!");
+        }
+
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -132,27 +187,83 @@ namespace BatchRename_Basic
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ActionsListBox.Items.Clear();
         }
 
         private void MoveTop_Click(object sender, RoutedEventArgs e)
         {
-
+            if (ActionsListBox.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select one method!");
+            }
+            else
+            {
+                //int newPosition = ActionsListBox.SelectedIndex;
+                //--newPosition;
+                if (ActionsListBox.SelectedIndex == 0)
+                    return;
+                var item = ActionsListBox.SelectedItem;
+                ActionsListBox.Items.Remove(item);
+                ActionsListBox.Items.Insert(0, item);
+                ActionsListBox.SelectedIndex = 0;
+            }
         }
 
         private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
-
+            if(ActionsListBox.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select one method!");
+            }
+            else
+            {
+                int newPosition = ActionsListBox.SelectedIndex;
+                --newPosition;
+                if (newPosition < 0)
+                    return;
+                var item = ActionsListBox.SelectedItem;
+                ActionsListBox.Items.Remove(item);
+                ActionsListBox.Items.Insert(newPosition, item);
+                ActionsListBox.SelectedIndex = newPosition;
+            }
         }
 
         private void MoveDown_Click(object sender, RoutedEventArgs e)
         {
-
+            if (ActionsListBox.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select one method!");
+            }
+            else
+            {
+                int newPosition = ActionsListBox.SelectedIndex;
+                ++newPosition;
+                if (newPosition >= ActionsListBox.Items.Count)
+                    return;
+                var item = ActionsListBox.SelectedItem;
+                ActionsListBox.Items.Remove(item);
+                ActionsListBox.Items.Insert(newPosition, item);
+                ActionsListBox.SelectedIndex = newPosition;
+            }
         }
 
         private void MoveBottom_Click(object sender, RoutedEventArgs e)
         {
-
+            if (ActionsListBox.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Please select one method!");
+            }
+            else
+            {
+                //int newPosition = ActionsListBox.SelectedIndex;
+                //--newPosition;
+                if (ActionsListBox.SelectedIndex == ActionsListBox.Items.Count)
+                    return;
+                var item = ActionsListBox.SelectedItem;
+                ActionsListBox.Items.Remove(item);
+                ActionsListBox.Items.Insert(ActionsListBox.Items.Count, item);
+                ActionsListBox.SelectedIndex = ActionsListBox.Items.Count - 1;
+            }
         }
 
         private void LoadPreset_Click(object sender, RoutedEventArgs e)
@@ -162,7 +273,80 @@ namespace BatchRename_Basic
 
         private void SavePreset_Click(object sender, RoutedEventArgs e)
         {
+            //if (ActionsListBox.Items.Count == 0)
+            //{
+            //    System.Windows.MessageBox.Show("Method empty!");
+            //    return;
+            //}
+            //// there are something to save
 
+            //var presetDialog = new SavePreset();
+            //if (presetDialog.ShowDialog() == true)
+            //{
+            //    string presetName = presetDialog.presetName;
+
+
+            //    // any preset file opened before ?
+            //    if (currentPresetFile != "")
+            //    {
+            //        using (StreamWriter sw = File.AppendText(currentPresetFile))
+            //        {
+            //            sw.WriteLine(presetName);
+
+            //            foreach (StringAction action in methodListBox.Items)
+            //            {
+            //                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+            //                sw.WriteLine(methodTemplate);
+            //            }
+
+            //            sw.WriteLine("**");
+
+            //        }
+            //        System.Windows.MessageBox.Show($"Saved. Please check preset file in {currentPresetFile}");
+            //    }
+            //    else
+            //    {
+            //        // default preset path is : C:/BatchRename/preset.txt
+            //        string presetFolderPath = @"C:\BatchRename";
+            //        string presetFilePath = @"C:\BatchRename\preset.txt";
+
+            //        if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
+            //        // if folder exist 
+            //        if (!File.Exists(presetFilePath))
+            //        {
+            //            using (StreamWriter sw = File.CreateText(presetFilePath))
+            //            {
+            //                sw.WriteLine(presetName);
+
+            //                foreach (StringAction action in methodListBox.Items)
+            //                {
+            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+            //                    sw.WriteLine(methodTemplate);
+            //                }
+            //                sw.WriteLine("**");
+            //            }
+            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
+            //        }
+            //        else
+            //        // append file
+            //        {
+            //            using (StreamWriter sw = File.AppendText(presetFilePath))
+            //            {
+            //                sw.WriteLine(presetName);
+
+            //                foreach (StringAction action in methodListBox.Items)
+            //                {
+            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+            //                    sw.WriteLine(methodTemplate);
+            //                }
+
+            //                sw.WriteLine("**");
+
+            //            }
+            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
+            //        }
+            //    }
+            //}
         }
 
         private void Setting_Click(object sender, RoutedEventArgs e)
