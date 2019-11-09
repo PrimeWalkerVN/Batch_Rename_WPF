@@ -130,13 +130,29 @@ namespace BatchRename_Basic
                     ListFile[i].NewFileName = tempFile.FileName;
                     ListFile[i].Error = "";
                     var temp = new FileInfo(ListFile[i].Path);
-                    temp.MoveTo(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName);
+                    string checkPath = Path.GetDirectoryName(ListFile[i].Path);
+                    if (File.Exists(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName))
+                    {
+                        System.Windows.MessageBox.Show($"File {tempFile.FileName} existed!");
+                        continue;
+                    }
+
+                    File.Move((Path.GetDirectoryName(ListFile[i].Path) + "\\" + ListFile[i].FileName).ToString(), (Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName).ToString());
+                    //temp.MoveTo(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName);
+                    //int pos = ListFile.IndexOf(ListFile[i]);
+                    //ListFile.Remove(ListFile[i]);
+                    ListFile[i].FileName = tempFile.FileName;
+                    ListFile[i].Path = Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName;
+                    //ListFile.Insert(pos, tempFile);
+
+                    /////
                     FileTab.Items.Refresh();
                     
                 //    File.Move(ListFile[i].Path, tempFile.FileName);
                 }
             }
             System.Windows.MessageBox.Show("File Done!");
+            
         }
 
         private void ProcessAllMethod_Folder()
@@ -168,12 +184,21 @@ namespace BatchRename_Basic
                     }
                 }
 
-                if (string.Compare(ListFolder[i].Error, "File duplicate!") != 0)
+                if (string.Compare(ListFolder[i].Error, "Folder duplicate!") != 0)
                 {
                     ListFolder[i].NewFileName = tempFolder.FileName;
                     ListFolder[i].Error = "";
                     var temp = new FileInfo(ListFolder[i].Path);
-                    temp.MoveTo(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName);
+                    if(Directory.Exists(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName))
+                    {
+                        System.Windows.MessageBox.Show($"Folder {tempFolder.FileName} existed!");
+                        continue;
+                    }
+                    Directory.Move((Path.GetDirectoryName(ListFolder[i].Path) + "\\" + ListFolder[i].FileName).ToString(), (Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName).ToString());
+
+                    ListFolder[i].FileName = tempFolder.FileName;
+                    ListFolder[i].Path = Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName;
+
                     FolderTab.Items.Refresh();
 
                     //    File.Move(ListFile[i].Path, tempFile.FileName);
@@ -188,7 +213,7 @@ namespace BatchRename_Basic
             if (MethodsBox.SelectedItem == null)
             {
 
-                System.Windows.MessageBox.Show("No method selected to add ?");
+                System.Windows.MessageBox.Show("No method selected to add!");
                 return;
             }
             var methodSelected = MethodsBox.SelectedItem as StringAction;
@@ -233,6 +258,7 @@ namespace BatchRename_Basic
                 --newPosition;
                 if (newPosition < 0)
                     return;
+
                 var item = ActionsListBox.SelectedItem;
                 ActionsListBox.Items.Remove(item);
                 ActionsListBox.Items.Insert(newPosition, item);
@@ -252,6 +278,7 @@ namespace BatchRename_Basic
                 ++newPosition;
                 if (newPosition >= ActionsListBox.Items.Count)
                     return;
+
                 var item = ActionsListBox.SelectedItem;
                 ActionsListBox.Items.Remove(item);
                 ActionsListBox.Items.Insert(newPosition, item);
@@ -597,14 +624,14 @@ namespace BatchRename_Basic
                 System.Windows.MessageBox.Show("Don't found file, try selected!");
             }
             else
-            {
-                // if selected item is on top then return
-                if (FileTab.SelectedIndex == 0) return;                     
-                object selected = FileTab.SelectedItem;
+            {  
+                if (FileTab.SelectedIndex == 0)
+                    return;                     
+
+                var selected = FileTab.SelectedItem;
                 FileTab.Items.Remove(selected);
                 FileTab.Items.Insert(0, selected);
                 FileTab.SelectedIndex = 0;
-                // else, insert on top List
             }
         }
 
@@ -617,8 +644,10 @@ namespace BatchRename_Basic
             else
             {
                 int newIndex = FileTab.SelectedIndex - 1;
-                if (newIndex < 0) return;
-                object selected = FileTab.SelectedItem;
+                if (newIndex < 0)
+                    return;
+
+                var selected = FileTab.SelectedItem;
                 FileTab.Items.Remove(selected);
                 FileTab.Items.Insert(newIndex, selected);
                 FileTab.SelectedIndex = newIndex;
@@ -635,8 +664,10 @@ namespace BatchRename_Basic
             else
             {
                 int newIndex = FileTab.SelectedIndex + 1;
-                if (newIndex >= FileTab.Items.Count) return;
-                object selected = FileTab.SelectedItem;
+                if (newIndex >= FileTab.Items.Count)
+                    return;
+
+                var selected = FileTab.SelectedItem;
                 FileTab.Items.Remove(selected);
                 FileTab.Items.Insert(newIndex, selected);
                 FileTab.SelectedIndex = newIndex;
@@ -651,10 +682,10 @@ namespace BatchRename_Basic
             }
             else
             {
-                // if item is at the bottom
-                if (FileTab.SelectedIndex == FileTab.Items.Count) return;
-                // else, insert item at the bottom
-                object selected = FileTab.SelectedItem;
+                if (FileTab.SelectedIndex == FileTab.Items.Count)
+                    return;
+                
+                var selected = FileTab.SelectedItem;
                 FileTab.Items.Remove(selected);
                 FileTab.Items.Insert(FileTab.Items.Count, selected);
                 FileTab.SelectedIndex = FileTab.Items.Count - 1;
@@ -734,13 +765,13 @@ namespace BatchRename_Basic
             }
             else
             {
-                // if selected item is on top then return
-                if (FolderTab.SelectedIndex == 0) return;
-                object selected = FolderTab.SelectedItem;
+                if (FolderTab.SelectedIndex == 0)
+                    return;
+
+                var selected = FolderTab.SelectedItem;
                 FolderTab.Items.Remove(selected);
                 FolderTab.Items.Insert(0, selected);
                 FolderTab.SelectedIndex = 0;
-                // else, insert on top List
             }
         }
 
@@ -753,8 +784,10 @@ namespace BatchRename_Basic
             else
             {
                 int newIndex = FolderTab.SelectedIndex - 1;
-                if (newIndex < 0) return;
-                object selected = FolderTab.SelectedItem;
+                if (newIndex < 0)
+                    return;
+
+                var selected = FolderTab.SelectedItem;
                 FolderTab.Items.Remove(selected);
                 FolderTab.Items.Insert(newIndex, selected);
                 FolderTab.SelectedIndex = newIndex;
@@ -770,8 +803,10 @@ namespace BatchRename_Basic
             else
             {
                 int newIndex = FolderTab.SelectedIndex + 1;
-                if (newIndex >= FolderTab.Items.Count) return;
-                object selected = FolderTab.SelectedItem;
+                if (newIndex >= FolderTab.Items.Count)
+                    return;
+
+                var selected = FolderTab.SelectedItem;
                 FolderTab.Items.Remove(selected);
                 FolderTab.Items.Insert(newIndex, selected);
                 FolderTab.SelectedIndex = newIndex;
@@ -786,10 +821,10 @@ namespace BatchRename_Basic
             }
             else
             {
-                // if item is at the bottom
-                if (FolderTab.SelectedIndex == FolderTab.Items.Count) return;
-                // else, insert item at the bottom
-                object selected = FolderTab.SelectedItem;
+                if (FolderTab.SelectedIndex == FolderTab.Items.Count)
+                    return;
+
+                var selected = FolderTab.SelectedItem;
                 FolderTab.Items.Remove(selected);
                 FolderTab.Items.Insert(FolderTab.Items.Count, selected);
                 FolderTab.SelectedIndex = FolderTab.Items.Count - 1;

@@ -36,7 +36,7 @@ namespace BatchRename_Basic.Features
             set
             {
                 newFileName = value;
-
+                NotifyChange("NewFileName");
             }
         }
 
