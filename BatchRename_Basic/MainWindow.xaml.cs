@@ -62,6 +62,12 @@ namespace BatchRename_Basic
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
+            ActionsListBox.Items.Clear();
+            
+            ListFile.Clear();
+            FileTab.Items.Clear();
+            ListFolder.Clear();
+            FolderTab.Items.Clear();
 
         }
 
@@ -580,7 +586,8 @@ namespace BatchRename_Basic
 
         private void ClearFile_Click(object sender, RoutedEventArgs e)
         {
-
+            ListFile.Clear();
+            FileTab.Items.Clear();
         }
 
         private void MoveFileTop_Click(object sender, RoutedEventArgs e)
@@ -664,7 +671,8 @@ namespace BatchRename_Basic
 
         private void ClearFolder_Click(object sender, RoutedEventArgs e)
         {
-
+            FolderTab.Items.Clear();
+            ListFolder.Clear();
         }
 
         private void MoveFolderTop_Click(object sender, RoutedEventArgs e)
