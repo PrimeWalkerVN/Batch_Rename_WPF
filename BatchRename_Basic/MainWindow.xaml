@@ -114,11 +114,13 @@
                             </StackPanel>
                         </Button>
                         <TextBlock Text="Preset: " TextAlignment="Center" Margin="20,0,0,5" VerticalAlignment="Center"/>
-                        <ComboBox Name="PresetBox" Width="200" Height="25">
+                        <ComboBox Name="PresetBox" Width="200" Height="25" DropDownClosed="OnChangePreset">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <!--Binding-->
-                                    <TextBlock Text=""/>
+                                    <WrapPanel>
+                                        <TextBlock Text="{Binding PresetName}" TextWrapping="Wrap"/>
+                                       
+                                    </WrapPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

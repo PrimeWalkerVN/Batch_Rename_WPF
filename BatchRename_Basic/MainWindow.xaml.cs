@@ -37,9 +37,6 @@ namespace BatchRename_Basic
             string ActivePresetFile = "";
         }
 
-
-
-
         // all global list
         ObservableCollection<StringAction> ListMethod = new ObservableCollection<StringAction>() {
             new ReplaceAction(),
@@ -278,34 +275,28 @@ namespace BatchRename_Basic
         private void LoadPreset_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog LoadFileDialog = new Microsoft.Win32.OpenFileDialog();
-            LoadFileDialog.Filter = "All Files (*.*)|*.*";
+            LoadFileDialog.Filter = "All Files (*.txt)|*.txt";
             LoadFileDialog.Multiselect = true;
 
 
             if (LoadFileDialog.ShowDialog() == true)
             {
-                // remove all items of methodPreset
-                //      PresetList = new ObservableCollection<Preset>();
+
                 ActionsListBox.Items.Clear();
                 string selectecPresetFilePath = LoadFileDialog.FileName;
 
-                // set global preset file path 
                 ActivePresetFile = selectecPresetFilePath;
-
-                // begin reading preset
 
                 using (StreamReader sr = new StreamReader(selectecPresetFilePath))
                 {
                     string Line;
 
                     while ((Line = sr.ReadLine()) != null)
-                    { // not endpoint?
-                        string presetname = Line; // set name of preset
+                    {
+                        string presetname = Line;
 
-                        //create a list of action to store actions
                         ObservableCollection<StringAction> temp = new ObservableCollection<StringAction>();
 
-                        // determine type of method to add to temp
                         while ((Line = sr.ReadLine()) != "--The end--")
                         {
                             if (Line.Contains("Replace"))
@@ -396,15 +387,12 @@ namespace BatchRename_Basic
                 System.Windows.MessageBox.Show("Method empty!");
                 return;
             }
-            // there are something to save
 
             var presetDialog = new SavePreset();
             if (presetDialog.ShowDialog() == true)
             {
                 string PresetName = presetDialog.PresetName;
 
-
-                // any preset file opened before ?
                 if (!string.IsNullOrEmpty(ActivePresetFile))
                 {
                     using (StreamWriter sw = File.AppendText(ActivePresetFile))
@@ -423,12 +411,12 @@ namespace BatchRename_Basic
                 }
                 else
                 {
-                    // default preset path is : C:/BatchRename/preset.txt
+                    // preset will save in the same .exe file
                     string presetFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     string presetFilePath = presetFolderPath + @"\" + PresetName + ".txt";
 
                     if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
-                    // if folder exist 
+                    
                     if (!File.Exists(presetFilePath))
                     {
                         using (StreamWriter sw = File.CreateText(presetFilePath))
@@ -445,7 +433,7 @@ namespace BatchRename_Basic
                         System.Windows.MessageBox.Show($"Preset saved in {presetFilePath}");
                     }
                     else
-                    // append file
+                    
                     {
                         using (StreamWriter sw = File.AppendText(presetFilePath))
                         {
@@ -702,6 +690,19 @@ namespace BatchRename_Basic
         private void FolderTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void OnChangePreset(object sender, EventArgs e)
+        {
+            if (PresetBox.SelectedIndex == -1) return;
+
+            ActionsListBox.Items.Clear();
+            ActionsListBox.ItemsSource = null;
+            object selected = PresetBox.SelectedItem;
+            foreach (StringAction act in (selected as Preset).ListPresetItem)
+            {
+                ActionsListBox.Items.Add(act);
+            }
         }
 
 
