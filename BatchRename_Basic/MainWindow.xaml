@@ -206,6 +206,14 @@
                                 Cursor="Hand" BorderThickness="0">
                                     <Image Width="20" Height="20" Source="Drawables/Arrow_Bottom.png" Stretch="Fill"/>
                                 </Button>
+
+                                <Button Name="RefreshButtonFile" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="RefreshButtonFile_Click" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20" Height="20" Source="Drawables/refresh.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Refresh" TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Border>
 
@@ -273,6 +281,14 @@
                                 <Button Name="MoveFolderBottom" Click="MoveFolderBottom_Click" Background="AliceBlue" 
                                 Cursor="Hand" BorderThickness="0">
                                     <Image Width="20" Height="20" Source="Drawables/Arrow_Bottom.png" Stretch="Fill"/>
+                                </Button>
+
+                                <Button Name="RefreshButtonFolder" Margin="10,0,10,0" Background="AliceBlue" 
+                                Cursor="Hand" Click="RefreshButtonFolder_Click" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20" Height="20" Source="Drawables/refresh.png" Stretch="Fill"/>
+                                        <TextBlock Text=" Refresh" TextAlignment="Justify" Height="20"/>
+                                    </StackPanel>
                                 </Button>
                             </StackPanel>
                         </Border>

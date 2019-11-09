@@ -869,6 +869,23 @@ namespace BatchRename_Basic
             }
         }
 
+        private void RefreshButtonFile_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(FileInfomation f in ListFile)
+            {
+                f.NewFileName = "";
+            }
+            FileTab.Items.Refresh();
+        }
+
+        private void RefreshButtonFolder_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (FileInfomation f in ListFolder)
+            {
+                f.NewFileName = "";
+            }
+            FolderTab.Items.Refresh();
+        }
 
         //Method list file/folder changed event
         /*
