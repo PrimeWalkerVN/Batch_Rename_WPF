@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BatchRename_Basic.Features;
 
 namespace BatchRename_Basic.SettingDisplay
 {
@@ -19,19 +20,35 @@ namespace BatchRename_Basic.SettingDisplay
     /// </summary>
     public partial class ISBNOption : Window
     {
-        public ISBNOption()
+        public string Optional; // User choose
+        public ISBNOption(ISBNArgs Args)
         {
             InitializeComponent();
-        }
-
-        private void CancelISBNButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            Optional = Args.Optional;
         }
 
         private void ISBNOK_Click(object sender, RoutedEventArgs e)
         {
-
+            if (BeforeRadio.IsChecked == true)
+            {
+                Optional = "Before";
+                this.DialogResult = true;
+            }
+            else if (AfterRadio.IsChecked == true)
+            {
+                Optional = "After";
+                this.DialogResult = true;
+            }
+            else {
+                MessageBox.Show("No option selected, please choose position...");
+            }
         }
+
+        private void CancelISBNButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        
     }
 }

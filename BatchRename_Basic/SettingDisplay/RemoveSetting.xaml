@@ -20,31 +20,21 @@
         <TextBlock Grid.Row="0" Text="Remove Parameters" TextAlignment="Center" FontSize="30" FontWeight="ExtraBold"
                   Foreground="Red"/>
 
+        <!--Body setting-->
         <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" 
-                    Margin="30">
-            <StackPanel Orientation="Horizontal" Height="30" Margin="50,0,0,50">
-                <TextBlock Width="200" Text="EEnter position remove: " VerticalAlignment="Center" />
-                <TextBox Margin="20,0,0,0" VerticalContentAlignment="Center" x:Name="startIndexTextBox" Width="100" TextWrapping="Wrap"/>
-            </StackPanel>
-
+                    Margin="50,54.4,43.6,135.6" Width="700">
             <StackPanel Orientation="Horizontal" Height="30" Margin="50,0,0,0">
-                <TextBlock Width="200" Text="Amount of character(s) remove: " VerticalAlignment="Center"/>
-                <TextBox Margin="20,0,0,0" VerticalContentAlignment="Center" x:Name="countTextBox" Width="100"/>
+                <TextBlock Width="308" FontSize="20" Text="Input String you want to remove: " VerticalAlignment="Center" Margin="0,2,0,2.4"/>
+                <TextBox Margin="20,0,0,0.4" VerticalContentAlignment="Center" x:Name="StringRemove" Width="321"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    >
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Name="ReplaceOK" Height="50" Width="100" VerticalAlignment="Top" Background="Bisque"
-                     Click="RemmoveOK_Click"
-                    Margin="20"
-                    >
+                     Click="RemmoveOK_Click" Margin="20" >
                 <TextBlock Text="OK" FontSize="20"></TextBlock>
             </Button>
             <Button Name="RemoveButton" Height="50" Width="100" VerticalAlignment="Top" Background="Bisque" 
-                    Click="CancelRemoveButton_Click"
-                    Margin="20"
-                    >
+                    Click="CancelRemoveButton_Click" Margin="20">
                 <TextBlock Text="Cancel" FontSize="20"></TextBlock>
             </Button>
         </StackPanel>

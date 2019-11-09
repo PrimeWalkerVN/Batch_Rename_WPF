@@ -39,7 +39,9 @@ namespace BatchRename_Basic
 
         // all global list
         ObservableCollection<StringAction> ListMethod = new ObservableCollection<StringAction>() {
-            new ReplaceAction()
+            new ReplaceAction(),
+            new ISBNAction(),
+            new RemoveAction()
         };
 
         ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
@@ -171,7 +173,8 @@ namespace BatchRename_Basic
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-
+            var selectedItem = ActionsListBox.SelectedItem;
+            ActionsListBox.Items.Remove(selectedItem);
         }
 
         private void OpenFileBrowser_Click(object sender, RoutedEventArgs e)
