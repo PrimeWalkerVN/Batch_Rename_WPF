@@ -14,7 +14,7 @@ namespace BatchRename_Basic.Features
     {
         string Details
         {
-            get; set;
+            get;
         }
 
         string ParseArgs();
@@ -22,9 +22,9 @@ namespace BatchRename_Basic.Features
 
     public interface StringAction
     {
-        string Name {get; set;}
+        string Name {get;}
 
-        StringOperation Operation { get; set; }
+        StringOperation Operation { get; }
         StringArgs Args { get; set; }
 
         StringAction Clone();
@@ -37,8 +37,8 @@ namespace BatchRename_Basic.Features
 
     public class ReplaceArgs : StringArgs, INotifyPropertyChanged
     {
-        private string _from= "from";
-        private string _to = "to";
+        private string _from= "";
+        private string _to = "";
 
         public ReplaceArgs() { }
 
@@ -76,8 +76,7 @@ namespace BatchRename_Basic.Features
         public string Details
         {
             get => $"Replace {From} with {To}";
-        }
-        string StringArgs.Details { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        }     
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyChange(string v)
@@ -107,10 +106,9 @@ namespace BatchRename_Basic.Features
 
             return result;
         }
-        public StringOperation Processor => _replace;
+        public StringOperation Operation => _replace;
         public StringArgs Args { get; set; }
-        string StringAction.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public StringOperation Operation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+       
 
         public StringAction Clone()
         {

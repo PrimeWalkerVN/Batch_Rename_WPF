@@ -56,9 +56,62 @@ namespace BatchRename_Basic
 
         }
 
+        //Start all method selected
         private void StartBatch_Click(object sender, RoutedEventArgs e)
         {
+            // check if no method selected
+            if(ActionsListBox.Items.Count == 0)
+            {
+                System.Windows.MessageBox.Show("No method selected!");
+                return;
+            }
 
+            if(ListFile.Count == 0 && ListFolder.Count == 0)
+            {
+                System.Windows.MessageBox.Show("No file (folder) selected!");
+                return;
+            }
+
+            ProcessAllMethod_File();
+        }
+
+        private void ProcessAllMethod_File()
+        {
+            for (int i = 0; i < ListFile.Count; ++i)
+            {
+                FileInfomation tempFile = new FileInfomation
+                {
+                    FileName = ListFile[i].FileName,
+                    Path = ListFile[i].Path
+                };
+                foreach (StringAction action in ActionsListBox.Items)
+                {
+                    tempFile.FileName = action.Operation.Invoke(tempFile.FileName);
+                    ObservableCollection<FileInfomation> tempListFile = new ObservableCollection<FileInfomation>(ListFile);
+                    tempListFile.Remove(tempListFile[i]);
+                    foreach (FileInfomation file in tempListFile)
+                    {
+                        if (string.Compare(tempFile.FileName, file.FileName) == 0)
+                        {
+                            ListFile[i].Error = "File duplicate!";
+                            ListFile[i].NewFileName = tempFile.FileName;
+                        }
+                    }
+                    if(string.Compare(tempFile.FileName," ") == 0)
+                    {
+                        ListFile[i].Error = "Error name!";
+                        break;
+                    }
+                }
+
+                if(string.Compare(ListFile[i].Error, "File duplicate!") != 0)
+                {
+                    ListFile[i].NewFileName = tempFile.FileName;
+                    ListFile[i].Error = "";
+                //    File.Move(ListFile[i].Path, tempFile.FileName);
+                 //   File.Move()
+                }
+            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
