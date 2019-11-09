@@ -183,13 +183,13 @@ namespace BatchRename_Basic.Features
         {
 
             var isbnArgs = Args as ISBNArgs;
-            if (isbnArgs.Optional == "before")
+            if (isbnArgs.Optional == "Before")
             {
                 string isbn = origin.Substring(0, 13);
                 string name = origin.Substring(15);
                 return $"{isbn} {name}";
             }
-            else if (isbnArgs.Optional == "after")
+            else if (isbnArgs.Optional == "After")
             {
                 string isbn = origin.Substring(0, 13);
                 string name = origin.Substring(15);

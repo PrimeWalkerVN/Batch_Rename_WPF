@@ -592,22 +592,73 @@ namespace BatchRename_Basic
 
         private void MoveFileTop_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FileTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                // if selected item is on top then return
+                if (FileTab.SelectedIndex == 0) return;                     
+                object selected = FileTab.SelectedItem;
+                FileTab.Items.Remove(selected);
+                FileTab.Items.Insert(0, selected);
+                FileTab.SelectedIndex = 0;
+                // else, insert on top List
+            }
         }
 
         private void MoveFileUp_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FileTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                int newIndex = FileTab.SelectedIndex - 1;
+                if (newIndex < 0) return;
+                object selected = FileTab.SelectedItem;
+                FileTab.Items.Remove(selected);
+                FileTab.Items.Insert(newIndex, selected);
+                FileTab.SelectedIndex = newIndex;
+            }
         }
 
         private void MoveFileDown_Click(object sender, RoutedEventArgs e)
         {
 
+            if (FileTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                int newIndex = FileTab.SelectedIndex + 1;
+                if (newIndex >= FileTab.Items.Count) return;
+                object selected = FileTab.SelectedItem;
+                FileTab.Items.Remove(selected);
+                FileTab.Items.Insert(newIndex, selected);
+                FileTab.SelectedIndex = newIndex;
+            }
         }
 
         private void MoveFileBottom_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FileTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                // if item is at the bottom
+                if (FileTab.SelectedIndex == FileTab.Items.Count) return;
+                // else, insert item at the bottom
+                object selected = FileTab.SelectedItem;
+                FileTab.Items.Remove(selected);
+                FileTab.Items.Insert(FileTab.Items.Count, selected);
+                FileTab.SelectedIndex = FileTab.Items.Count - 1;
+            }
         }
 
         private void FileTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -677,22 +728,72 @@ namespace BatchRename_Basic
 
         private void MoveFolderTop_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FolderTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                // if selected item is on top then return
+                if (FolderTab.SelectedIndex == 0) return;
+                object selected = FolderTab.SelectedItem;
+                FolderTab.Items.Remove(selected);
+                FolderTab.Items.Insert(0, selected);
+                FolderTab.SelectedIndex = 0;
+                // else, insert on top List
+            }
         }
 
         private void MoveFolderUp_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FolderTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                int newIndex = FolderTab.SelectedIndex - 1;
+                if (newIndex < 0) return;
+                object selected = FileTab.SelectedItem;
+                FolderTab.Items.Remove(selected);
+                FolderTab.Items.Insert(newIndex, selected);
+                FolderTab.SelectedIndex = newIndex;
+            }
         }
 
         private void MoveFolderDown_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FolderTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                int newIndex = FolderTab.SelectedIndex + 1;
+                if (newIndex >= FolderTab.Items.Count) return;
+                object selected = FolderTab.SelectedItem;
+                FolderTab.Items.Remove(selected);
+                FolderTab.Items.Insert(newIndex, selected);
+                FolderTab.SelectedIndex = newIndex;
+            }
         }
 
         private void MoveFolderBottom_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FolderTab.SelectedIndex == -1)
+            {
+                System.Windows.MessageBox.Show("Don't found file, try selected!");
+            }
+            else
+            {
+                // if item is at the bottom
+                if (FolderTab.SelectedIndex == FolderTab.Items.Count) return;
+                // else, insert item at the bottom
+                object selected = FolderTab.SelectedItem;
+                FolderTab.Items.Remove(selected);
+                FolderTab.Items.Insert(FolderTab.Items.Count, selected);
+                FolderTab.SelectedIndex = FolderTab.Items.Count - 1;
+            }
         }
 
         private void FolderTab_SelectionChanged(object sender, SelectionChangedEventArgs e)

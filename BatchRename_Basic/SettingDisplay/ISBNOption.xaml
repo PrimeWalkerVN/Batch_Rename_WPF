@@ -15,7 +15,7 @@
                        />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Name="BeforeRadio" Content="Before name" Margin="0,0,20,0" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                             FontSize="20"/>
+                             FontSize="20" IsChecked="True"/>
                 <RadioButton Name="AfterRadio" Content="After name" Margin="0,0,20,0" VerticalContentAlignment="Center"
                              FontSize="20"/>
 
