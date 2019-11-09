@@ -26,7 +26,7 @@ namespace BatchRename_Basic.Features
             set
             {
                 fileName = value;
-                NotifyChange("FileName");
+           //     NotifyChange("FileName");
             }
         }
 

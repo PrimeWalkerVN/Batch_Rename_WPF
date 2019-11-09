@@ -153,7 +153,7 @@ namespace BatchRename_Basic
                         //ListFile.Insert(pos, tempFile);
 
                         /////
-                        FileTab.Items.Refresh();
+                     //   FileTab.Items.Refresh();
 
                         //    File.Move(ListFile[i].Path, tempFile.FileName);
                     }
@@ -173,9 +173,18 @@ namespace BatchRename_Basic
                     FileName = ListFolder[i].FileName,
                     Path = ListFolder[i].Path
                 };
+
+                bool fileNameChange = true;
                 foreach (StringAction action in ActionsListBox.Items)
                 {
+                    string tempCheck = tempFolder.FileName;
                     tempFolder.FileName = action.Operation.Invoke(tempFolder.FileName);
+                    //Truong hop folder name khong thay doi
+                    if (string.Compare(tempCheck, tempFolder.FileName) == 0)
+                        fileNameChange = false;
+                    if (!fileNameChange)
+                        break;
+
                     ObservableCollection<FileInfomation> tempListFolder = new ObservableCollection<FileInfomation>(ListFolder);
                     tempListFolder.Remove(tempListFolder[i]);
                     foreach (FileInfomation file in tempListFolder)
@@ -192,25 +201,27 @@ namespace BatchRename_Basic
                         break;
                     }
                 }
-
-                if (string.Compare(ListFolder[i].Error, "Folder duplicate!") != 0)
+                if (fileNameChange)
                 {
-                    ListFolder[i].NewFileName = tempFolder.FileName;
-                    ListFolder[i].Error = "";
-                    var temp = new FileInfo(ListFolder[i].Path);
-                    if(Directory.Exists(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName))
+                    if (string.Compare(ListFolder[i].Error, "Folder duplicate!") != 0)
                     {
-                        System.Windows.MessageBox.Show($"Folder {tempFolder.FileName} existed!");
-                        continue;
+                        ListFolder[i].NewFileName = tempFolder.FileName;
+                        ListFolder[i].Error = "";
+                        var temp = new FileInfo(ListFolder[i].Path);
+                        if (Directory.Exists(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName))
+                        {
+                            System.Windows.MessageBox.Show($"Folder {tempFolder.FileName} existed!");
+                            continue;
+                        }
+                        Directory.Move((Path.GetDirectoryName(ListFolder[i].Path) + "\\" + ListFolder[i].FileName).ToString(), (Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName).ToString());
+
+                        ListFolder[i].FileName = tempFolder.FileName;
+                        ListFolder[i].Path = Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName;
+
+                        //FolderTab.Items.Refresh();
+
+                        //    File.Move(ListFile[i].Path, tempFile.FileName);
                     }
-                    Directory.Move((Path.GetDirectoryName(ListFolder[i].Path) + "\\" + ListFolder[i].FileName).ToString(), (Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName).ToString());
-
-                    ListFolder[i].FileName = tempFolder.FileName;
-                    ListFolder[i].Path = Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName;
-
-                    FolderTab.Items.Refresh();
-
-                    //    File.Move(ListFile[i].Path, tempFile.FileName);
                 }
             }
             System.Windows.MessageBox.Show("Folder Done!");
