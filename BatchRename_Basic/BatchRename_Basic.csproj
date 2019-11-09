@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Features\Preset.cs" />
     <Compile Include="SettingDisplay\ExtensionSetting.xaml.cs">
       <DependentUpon>ExtensionSetting.xaml</DependentUpon>
     </Compile>

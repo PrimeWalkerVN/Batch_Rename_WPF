@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,6 +34,7 @@ namespace BatchRename_Basic
         public MainWindow()
         {
             InitializeComponent();
+            string ActivePresetFile = "";
         }
 
 
@@ -51,7 +53,10 @@ namespace BatchRename_Basic
 
         ObservableCollection<FileInfomation> ListFile = new ObservableCollection<FileInfomation>();
         ObservableCollection<FileInfomation> ListFolder = new ObservableCollection<FileInfomation>();
-        //preset here
+        ObservableCollection<Preset> PresetList = new ObservableCollection<Preset>();
+
+        public string ActivePresetFile { get; private set; }
+        public string PresetName { get; private set; }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -272,85 +277,193 @@ namespace BatchRename_Basic
 
         private void LoadPreset_Click(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog LoadFileDialog = new Microsoft.Win32.OpenFileDialog();
+            LoadFileDialog.Filter = "All Files (*.*)|*.*";
+            LoadFileDialog.Multiselect = true;
 
+
+            if (LoadFileDialog.ShowDialog() == true)
+            {
+                // remove all items of methodPreset
+                //      PresetList = new ObservableCollection<Preset>();
+                ActionsListBox.Items.Clear();
+                string selectecPresetFilePath = LoadFileDialog.FileName;
+
+                // set global preset file path 
+                ActivePresetFile = selectecPresetFilePath;
+
+                // begin reading preset
+
+                using (StreamReader sr = new StreamReader(selectecPresetFilePath))
+                {
+                    string Line;
+
+                    while ((Line = sr.ReadLine()) != null)
+                    { // not endpoint?
+                        string presetname = Line; // set name of preset
+
+                        //create a list of action to store actions
+                        ObservableCollection<StringAction> temp = new ObservableCollection<StringAction>();
+
+                        // determine type of method to add to temp
+                        while ((Line = sr.ReadLine()) != "--The end--")
+                        {
+                            if (Line.Contains("Replace"))
+                            {
+                                temp.Add(new ReplaceAction()
+                                {
+                                    Args = new ReplaceArgs(Line)
+                                });
+                            }
+                            else
+                            {
+                                if (Line.Contains("Remove"))
+                                {
+                                    temp.Add(new RemoveAction()
+                                    {
+                                        Args = new RemoveArgs(Line)
+                                    });
+                                }
+                                else
+                                {
+                                    if (Line.Contains("Extension"))
+                                    {
+                                        temp.Add(new ExtensionAction()
+                                        {
+                                            Args = new ExtensionArgs(Line)
+                                        });
+                                    }
+                                    else
+                                    {
+                                        if (Line.Contains("Case"))
+                                        {
+                                            temp.Add(new CaseAction()
+                                            {
+                                                Args = new CaseArgs(Line)
+                                            });
+                                        }
+                                        else
+                                        {
+                                            if (Line.Contains("Normalize"))
+                                            {
+                                                temp.Add(new NormalizeAction()
+                                                {
+                                                    Args = new NormalizeArgs()
+                                                });
+                                            }
+                                            else
+                                            {
+                                                if (Line.Contains("ISBN"))
+                                                {
+                                                    temp.Add(new ISBNAction()
+                                                    {
+                                                        Args = new ISBNArgs()
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    if (Line.Contains("GUID"))
+                                                    {
+                                                        temp.Add(new GUIDAction()
+                                                        {
+                                                            Args = new GUIDArgs()
+                                                        });
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        PresetList.Add(new Preset()
+                        {
+                            PresetName = presetname,
+                            ListPresetItem = temp
+                        });
+                    }
+                }
+            }
+
+            PresetBox.ItemsSource = PresetList;
         }
 
         private void SavePreset_Click(object sender, RoutedEventArgs e)
         {
-            //if (ActionsListBox.Items.Count == 0)
-            //{
-            //    System.Windows.MessageBox.Show("Method empty!");
-            //    return;
-            //}
-            //// there are something to save
+            if (ActionsListBox.Items.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Method empty!");
+                return;
+            }
+            // there are something to save
 
-            //var presetDialog = new SavePreset();
-            //if (presetDialog.ShowDialog() == true)
-            //{
-            //    string presetName = presetDialog.presetName;
+            var presetDialog = new SavePreset();
+            if (presetDialog.ShowDialog() == true)
+            {
+                string PresetName = presetDialog.PresetName;
 
 
-            //    // any preset file opened before ?
-            //    if (currentPresetFile != "")
-            //    {
-            //        using (StreamWriter sw = File.AppendText(currentPresetFile))
-            //        {
-            //            sw.WriteLine(presetName);
+                // any preset file opened before ?
+                if (!string.IsNullOrEmpty(ActivePresetFile))
+                {
+                    using (StreamWriter sw = File.AppendText(ActivePresetFile))
+                    {
+                        sw.WriteLine(PresetName);
 
-            //            foreach (StringAction action in methodListBox.Items)
-            //            {
-            //                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                sw.WriteLine(methodTemplate);
-            //            }
+                        foreach (StringAction action in ActionsListBox.Items)
+                        {
+                            string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                            sw.WriteLine(methodTemplate);
+                        }
 
-            //            sw.WriteLine("**");
+                        sw.WriteLine("--The end--");
+                    }
+                    System.Windows.MessageBox.Show($"Preset saved in {ActivePresetFile}");
+                }
+                else
+                {
+                    // default preset path is : C:/BatchRename/preset.txt
+                    string presetFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    string presetFilePath = presetFolderPath + @"\" + PresetName + ".txt";
 
-            //        }
-            //        System.Windows.MessageBox.Show($"Saved. Please check preset file in {currentPresetFile}");
-            //    }
-            //    else
-            //    {
-            //        // default preset path is : C:/BatchRename/preset.txt
-            //        string presetFolderPath = @"C:\BatchRename";
-            //        string presetFilePath = @"C:\BatchRename\preset.txt";
+                    if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
+                    // if folder exist 
+                    if (!File.Exists(presetFilePath))
+                    {
+                        using (StreamWriter sw = File.CreateText(presetFilePath))
+                        {
+                            sw.WriteLine(PresetName);
 
-            //        if (!Directory.Exists(presetFolderPath)) Directory.CreateDirectory(presetFolderPath);
-            //        // if folder exist 
-            //        if (!File.Exists(presetFilePath))
-            //        {
-            //            using (StreamWriter sw = File.CreateText(presetFilePath))
-            //            {
-            //                sw.WriteLine(presetName);
+                            foreach (StringAction action in ActionsListBox.Items)
+                            {
+                                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                                sw.WriteLine(methodTemplate);
+                            }
+                            sw.WriteLine("--The end--");
+                        }
+                        System.Windows.MessageBox.Show($"Preset saved in {presetFilePath}");
+                    }
+                    else
+                    // append file
+                    {
+                        using (StreamWriter sw = File.AppendText(presetFilePath))
+                        {
+                            sw.WriteLine(PresetName);
 
-            //                foreach (StringAction action in methodListBox.Items)
-            //                {
-            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                    sw.WriteLine(methodTemplate);
-            //                }
-            //                sw.WriteLine("**");
-            //            }
-            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
-            //        }
-            //        else
-            //        // append file
-            //        {
-            //            using (StreamWriter sw = File.AppendText(presetFilePath))
-            //            {
-            //                sw.WriteLine(presetName);
+                            foreach (StringAction action in ActionsListBox.Items)
+                            {
+                                string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
+                                sw.WriteLine(methodTemplate);
+                            }
 
-            //                foreach (StringAction action in methodListBox.Items)
-            //                {
-            //                    string methodTemplate = $"{action.Name}/{action.Args.ParseArgs()}";
-            //                    sw.WriteLine(methodTemplate);
-            //                }
+                            sw.WriteLine("--The end--");
 
-            //                sw.WriteLine("**");
-
-            //            }
-            //            MessageBox.Show($"Saved. Please check preset file in {presetFilePath}");
-            //        }
-            //    }
-            //}
+                        }
+                        System.Windows.MessageBox.Show($"Preset saved in {presetFilePath}");
+                    }
+                }
+            }
         }
 
         private void Setting_Click(object sender, RoutedEventArgs e)
