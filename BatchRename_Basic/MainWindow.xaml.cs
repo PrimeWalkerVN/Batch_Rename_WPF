@@ -106,6 +106,7 @@ namespace BatchRename_Basic
                     Path = ListFile[i].Path
                 };
                 bool fileNameChange = true;
+                bool theSameIfLower = false;
                 foreach (StringAction action in ActionsListBox.Items)
                 {
                     string tempCheck = tempFile.FileName;
@@ -115,6 +116,8 @@ namespace BatchRename_Basic
                         fileNameChange = false;
                     if (!fileNameChange)
                         break;
+                    if (string.Compare(tempCheck.ToLower(), tempFile.FileName.ToLower()) == 0)
+                        theSameIfLower = true;
                     ObservableCollection<FileInfomation> tempListFile = new ObservableCollection<FileInfomation>(ListFile);
                     tempListFile.Remove(tempListFile[i]);
                     foreach (FileInfomation file in tempListFile)
@@ -138,7 +141,7 @@ namespace BatchRename_Basic
                         ListFile[i].Error = "";
                         var temp = new FileInfo(ListFile[i].Path);
                         string checkPath = Path.GetDirectoryName(ListFile[i].Path);
-                        if (File.Exists(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName))
+                        if (File.Exists(Path.GetDirectoryName(ListFile[i].Path) + "\\" + tempFile.FileName) && !theSameIfLower)
                         {
                             System.Windows.MessageBox.Show($"File {tempFile.FileName} existed!");
                             continue;
@@ -175,6 +178,7 @@ namespace BatchRename_Basic
                 };
 
                 bool fileNameChange = true;
+                bool theSameIfLower = false;
                 foreach (StringAction action in ActionsListBox.Items)
                 {
                     string tempCheck = tempFolder.FileName;
@@ -184,6 +188,8 @@ namespace BatchRename_Basic
                         fileNameChange = false;
                     if (!fileNameChange)
                         break;
+                    if (string.Compare(tempCheck.ToLower(), tempFolder.FileName.ToLower()) == 0)
+                        theSameIfLower = true;
 
                     ObservableCollection<FileInfomation> tempListFolder = new ObservableCollection<FileInfomation>(ListFolder);
                     tempListFolder.Remove(tempListFolder[i]);
@@ -208,7 +214,7 @@ namespace BatchRename_Basic
                         ListFolder[i].NewFileName = tempFolder.FileName;
                         ListFolder[i].Error = "";
                         var temp = new FileInfo(ListFolder[i].Path);
-                        if (Directory.Exists(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName))
+                        if (Directory.Exists(Path.GetDirectoryName(ListFolder[i].Path) + "\\" + tempFolder.FileName) && !theSameIfLower)
                         {
                             System.Windows.MessageBox.Show($"Folder {tempFolder.FileName} existed!");
                             continue;
