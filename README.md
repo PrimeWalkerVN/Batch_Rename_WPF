@@ -5,6 +5,7 @@
 <br> Đây là các source tham khảo trong quá trình thực hiện project
 <br> **Reference** [Click here](https://github.com/hyperion0201/batch-rename) 
 <br> **Reference** [Click here](https://github.com/ErodNelps/BatchRename-WPF)
+<br> **Video demo: [Click here](https://youtu.be/i4mDcLXWNnY)**
 
 ## **Những chức năng đã làm được**
 
@@ -52,4 +53,4 @@ Các chức năng theo yêu cầu của project và điểm tự đánh giá:
 <br>    Ví dụ `co...m@@` sẽ được chuẩn hóa lại thành `com`
 
 * Có thêm chức năng **Clear**, **Refresh**, Các nút để thay đổi vị trí, thứ tự các hành động và tập tin
-* Các chức năng đã được test với nhiều bộ test khác nhau, chi tiết có thể xem ở video demo: [Click here](https://github.com/PrimeWalkerVN/Batch_Rename_WPF)
+* Các chức năng đã được test với nhiều bộ test khác nhau, chi tiết có thể xem ở video demo: [Click here](https://youtu.be/i4mDcLXWNnY)
